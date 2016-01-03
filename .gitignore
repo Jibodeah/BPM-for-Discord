@@ -12,6 +12,9 @@ www/xul/*.xpi
 __pycache__
 *.pyc
 
+#Discord ignores
+/discord/installer/node_modules/
+
 # Other stuff
 /misc
 /venv*
@@ -21,3 +24,5 @@ __pycache__
 /node_modules/
 /animotes/
 /build/
+*.swp
+

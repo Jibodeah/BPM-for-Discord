@@ -33,6 +33,17 @@
 
 VERSION = 66.265
 
+# Discord release process:
+# - Bump DISCORD_VERSION (format = discord-v[semantic version]-[alpha/beta/release])
+# - Commit code to git
+# $ make release/discord
+# - Upload generated 7z to tag's release on Github, flag draft as pre-release (maybe automate in the future)
+# - Smoke test release locally
+# - Flag pre-release as ready, edited and good to go 
+# - Notify interested parties
+
+DISCORD_VERSION = discord-v0.5.1-beta
+
 CONTENT_SCRIPT := \
     addon/bpm-header.js addon/bpm-utils.js addon/bpm-browser.js \
     addon/bpm-store.js addon/bpm-search.js addon/bpm-inject.js \
@@ -197,3 +208,111 @@ build/BPM.safariextension: $(ADDON_DATA) addon/sf-Settings.plist addon/sf-backgr
 	cp addon/pref-setup.js build/BPM.safariextension
 
 	cd build/BPM.safariextension && zip ../BPM.safariextension.zip *
+
+#Set via environment variable
+#DC_BPM_ARCHIVE_PASSWORD= 
+
+DISCORD_ADDITONAL_DATA := \
+	discord/addon/background.js discord/addon/settings.js discord/addon/settings.css \
+	discord/addon/emote-settings.html discord/addon/general-settings.html discord/addon/search-settings.html \
+	discord/addon/settings-wrapper.html discord/addon/subreddit-settings.html discord/addon/about.html \
+	discord/addon/updates.html discord/addon/search.css discord/addon/search-button.js
+
+DISCORD_SETTINGS_SCRIPT := \
+	discord/addon/utils.js discord/addon/emote-settings.js discord/addon/general-settings.js \
+	discord/addon/subreddit-settings.js discord/addon/search-settings.js discord/addon/updates.js \
+    discord/addon/settings.js
+
+DISCORD_INSTALLER := \
+    discord/installer/constants.js discord/installer/index.js discord/installer/package.json \
+    discord/installer/install_mac.command discord/installer/install_windows.bat discord/installer/win_ps.ps1 \
+    discord/installer/README.md
+
+DISCORD_INTEGRATION := \
+	discord/integration/package.json discord/integration/bpm.js discord/integration/bpm-settings.js \
+    discord/integration/bpm-search.js discord/integration/README.md
+
+# Note, requires node, globally installed asar (npm install asar -g)
+build/discord/installer: $(DISCORD_INSTALLER)
+	mkdir -p build/discord
+	
+	for INSTALLER_FILE in $(DISCORD_INSTALLER); \
+	do \
+		cp $$INSTALLER_FILE build/discord/; \
+	done
+	
+	cd build/discord && npm install
+
+build/discord/integration.asar: $(DISCORD_INTEGRATION)
+	mkdir -p build/discord
+	asar pack discord/integration/ build/discord/integration.asar
+
+build/discord/bpm.asar: $(ADDON_DATA) $(DISCORD_ADDITONAL_DATA) $(DISCORD_SETTINGS_SCRIPT)
+	mkdir -p build/discord
+	mkdir -p build/discord/addon
+	
+	cat $(DISCORD_SETTINGS_SCRIPT) > build/discord/addon/settings.js
+	cp discord/addon/background.js build/discord/addon/background.js
+	cp discord/addon/search-button.js build/discord/addon/search-button.js
+	cp discord/addon/settings-wrapper.html build/discord/addon/settings-wrapper.html
+	cp discord/addon/general-settings.html build/discord/addon/general-settings.html
+	cp discord/addon/emote-settings.html build/discord/addon/emote-settings.html
+	cp discord/addon/subreddit-settings.html build/discord/addon/subreddit-settings.html
+	cp discord/addon/search-settings.html build/discord/addon/search-settings.html
+	cp discord/addon/about.html build/discord/addon/about.html
+	cp discord/addon/updates.html build/discord/addon/updates.html
+	
+	cp discord/addon/settings.css build/discord/addon/settings.css
+	cp discord/addon/search.css build/discord/addon/search.css
+	
+	sed -i "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/addon/about.html
+	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/addon/about.html
+	sed -i "s/\/\* REPLACE-WITH-DC-VERSION \*\//'$(DISCORD_VERSION)'/g" build/discord/addon/settings.js
+
+	cp build/betterponymotes.js build/discord/addon
+	cp build/bpm-resources.js build/discord/addon
+	cp build/emote-classes.css build/discord/addon
+	cp build/gif-animotes.css build/discord/addon
+	
+	cp addon/bootstrap.css build/discord/addon
+	cp addon/bpmotes.css build/discord/addon
+	cp addon/combiners-nsfw.css build/discord/addon
+	cp addon/extracss-pure.css build/discord/addon
+	cp addon/extracss-webkit.css build/discord/addon
+	cp addon/options.css build/discord/addon
+	cp addon/options.html build/discord/addon
+	cp addon/options.js build/discord/addon
+	cp addon/pref-setup.js build/discord/addon
+	
+	asar pack build/discord/addon/ build/discord/bpm.asar
+	rm -rf build/discord/addon
+
+discord: build/discord/installer build/discord/bpm.asar build/discord/integration.asar
+
+#Ideally we'd also upload the 7z to the release, but that's notably more difficult than it would seem 
+discord/release: discord
+	#Make sure we know what we're releasing
+	git status 
+	git log -1 
+	read -r -p "Tag with above commit as $(DISCORD_VERSION) (y/n)? " DC_RELEASE_CONFIRM;\
+	if [ "$$DC_RELEASE_CONFIRM" != "y" ] && [ "$$DC_RELEASE_CONFIRM" != "Y" ]; then \
+		exit 1; \
+	fi
+	#Push a tag to git
+	git tag -a "$(DISCORD_VERSION)" -m "Release of discord version $(DISCORD_VERSION)" 
+	git push origin $(DISCORD_VERSION) 
+	
+	#Create a 7z archive
+	rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z
+	7z a ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z -r ./build/discord/*
+	
+	#I'm leaving the password-protected code here just in case
+	#Mac doesn't have a good 7z client that handles password protected so we create a zip.
+	#rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION)\ MAC.zip
+	#cd ./build/discord && zip -r --password $(DC_BPM_ARCHIVE_PASSWORD) ../BPM\ for\ Discord\ $(DISCORD_VERSION)\ MAC.zip . 
+	#
+	#Windows actually can't extract a zipped version because the built in tools don't support the long directory paths
+	#that node's module tree creates.  So, we use 7z for Windows.  In other news, what the fuck, MS.
+	#rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION)\ WINDOWS.7z
+	#7z a ./build/BPM\ for\ Discord\ $(DISCORD_VERSION)\ WINDOWS.7z -r ./build/discord/* -p$(DC_BPM_ARCHIVE_PASSWORD) -mhe 
+
