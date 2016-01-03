@@ -32,7 +32,7 @@ function init_css(store) {
             }
         }
 
-        if(platform === "chrome-ext") {
+        if(platform === "chrome-ext" || platform === "discord-ext") {
             // Fix for Chrome, which sometimes doesn't rerender unknown emote
             // elements. The result is that until the element is "nudged" in
             // some way- merely viewing it in the Console/platform Elements
@@ -48,6 +48,21 @@ function init_css(store) {
         }
 
         add_css(store.custom_css);
+/* Commented out for Discord to see how things work w/o it
+        // This needs to come after subreddit CSS to override their !important,
+        // so just use document.head directly.
+        if(platform === "chrome-ext" || platform === "discord-ext") {
+            make_css_link("/gif-animotes.css", function(tag) {
+                if(document.head) {
+                    document.head.appendChild(tag);
+                } else {
+                    with_dom(function() { // Chrome, at least
+                        document.head.appendChild(tag);
+                    });
+                }
+            });
+        }
+*/
     });
 
     with_dom(function() {
