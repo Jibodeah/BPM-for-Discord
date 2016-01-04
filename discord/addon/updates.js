@@ -20,8 +20,10 @@ function BPM_checkForUpdates(createAlert) {
     xhr.onreadystatechange = function() {
         if(xhr.readyState != 4) return;
         if(xhr.status !== 200 && xhr.status !== 304) {
-           alert('Error checking for updates, HTTP status: ' + xhr.status + '.  Is Github down?'); 
-           return;
+            if(createAlert) {
+                alert('Error checking for updates, HTTP status: ' + xhr.status + '.  Is Github down?'); 
+            }
+            return;
         }
         var response = JSON.parse(xhr.responseText);
         //TODO:  Will fail if there's no non-prereleases ready.
