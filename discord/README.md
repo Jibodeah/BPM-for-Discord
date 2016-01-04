@@ -2,13 +2,15 @@
 
 This directory contains code for installing and running BPM inside of Discord's Mac and Windows Desktop apps (Linux support coming when a desktop app is added to Linux).
 
-All changes in build process are contained in the Makefile of the root of this repo.
+All changes to the build process are contained in the Makefile of the root of the repo.
 
 ## Development practices
 
 All changes to Discord-specific code should be done on the `discord` branch.  All of these changes should live in the `discord` directory.  Browser code should live in `discord/addon`, `app.asar` code should live in `discord/integration` and installer code should live in `discord/installer`. 
 
-All changes to the BPM core should be made on `discord-core-changes`.  These changes should then be PR'd up to the BPM main repo.  When these changes are committed to the branch `discord` should be rebased on top of `discord-core-changes` (I am aware this will require a `git push --force origin discord`.  I am willing to accept that risk on my own repo).
+All changes to the BPM core should be made on the `discord-core-changes`  branch.  These changes are being PR'd up to the BPM main repo.  When these changes are committed to the branch `discord` should be rebased on top of `discord-core-changes` (I am aware this will require a `git push --force origin discord`.  I am willing to accept that risk on my own repo).
+
+Eventually once [the core repo PR](https://github.com/Rothera/bpm/pull/12) is merged in, we'll pull the upstream master branch into this fork's master and then rebase `discord` on top of it.  `discord-core-changes` will be kept for posterity.
 
 ## Build
 
@@ -28,11 +30,16 @@ The following build hooks are available:
 4. Moves all files from `build/addon` into `build/discord/addon`
 5. Concatenates all settings scripts from `discord/addon` into a single `settings.js` and moves it to `build/discord/addon/settings.js`
 6. Moves all other scripts and files from `discord/addon` to `build/discord/addon`
-7. Packs `build/discord/addon` into `build/discord/bpm.asar` and deletes `build/discord/addon`
+7. Find/Replace-s the current version numbers into `build/discord/addon/about.html` and `build/discord/about/updates.js` 
+8. Packs `build/discord/addon` into `build/discord/bpm.asar`
+9. Deletes `build/discord/addon`
 
 The final contents of `build/discord` should now look like this:
+    
     /bpm.asar
+    
     /integration.asar
+    
     /CONTENTS-OF-`discord/installer`
 
 ### `make discord/release`
@@ -59,9 +66,9 @@ If you wish to perform a release that does _not_ notify users (for example if on
 
 ## Submodules
 
-* Installer
-* Integration
-* Addon
+* <a href="https://github.com/ByzantineFailure/bpm/tree/discord/discord/installer">Installer</a>
+* <a href="https://github.com/ByzantineFailure/bpm/tree/discord/discord/integration">Integration</a>
+* <a href="https://github.com/ByzantineFailure/bpm/tree/discord/discord/addon">Addon</a>
 
 See each subfolder for what each submodule does.
 

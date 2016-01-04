@@ -10,6 +10,7 @@ The install script takes one argument, which is the path the `bpm.asar` and `int
 The process the install script follows is:
 
 1.  Find Discord's resources directory
+
 * On Windows this is `%LOCALAPPDATA%\discord\app-LATEST_VERSION\resources`
 * On OSX this is `/Applications/Discord.app/Contents/Resources`
 
@@ -28,6 +29,7 @@ The process the install script follows is:
 8.  Repack the modified `asar` and replace `app.asar` with it
 
 9.  Unpack `bpm.asar` into a local data directory
+
 * On Windows this is `%APPDATA%/discord`
 * On OSX this is `~/Library/Preferences/discord`
 
