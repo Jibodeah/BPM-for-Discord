@@ -14,6 +14,12 @@ __pycache__
 
 #Discord ignores
 /discord/installer/node_modules/
+/discord/addon/node_modules/
+
+/discord/addon/core/*.css
+/discord/addon/core/betterponymotes.js
+/discord/addon/core/bpm-resources.js
+/discord/addon/core/pref-setup.js
 
 # Other stuff
 /misc

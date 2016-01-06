@@ -42,7 +42,7 @@ VERSION = 66.265
 # - Flag pre-release as ready, edited and good to go 
 # - Notify interested parties
 
-DISCORD_VERSION = discord-v0.5.2-beta
+DISCORD_VERSION = discord-v0.6.0-beta
 
 CONTENT_SCRIPT := \
     addon/bpm-header.js addon/bpm-utils.js addon/bpm-browser.js \
@@ -212,28 +212,95 @@ build/BPM.safariextension: $(ADDON_DATA) addon/sf-Settings.plist addon/sf-backgr
 #Set via environment variable
 #DC_BPM_ARCHIVE_PASSWORD= 
 
-DISCORD_ADDITONAL_DATA := \
-	discord/addon/background.js discord/addon/settings.js discord/addon/settings.css \
-	discord/addon/emote-settings.html discord/addon/general-settings.html discord/addon/search-settings.html \
-	discord/addon/settings-wrapper.html discord/addon/subreddit-settings.html discord/addon/about.html \
-	discord/addon/updates.html discord/addon/search.css discord/addon/search-button.js
+DISCORD_INTEGRATION := \
+	discord/integration/package.json discord/integration/bpm.js discord/integration/README.md
 
 DISCORD_SETTINGS_SCRIPT := \
-	discord/addon/utils.js discord/addon/emote-settings.js discord/addon/general-settings.js \
-	discord/addon/subreddit-settings.js discord/addon/search-settings.js discord/addon/updates.js \
-    discord/addon/settings.js
+    discord/addon/settings/about.js discord/addon/settings/emotes.js \
+    discord/addon/settings/general.js discord/addon/settings/search.js \
+    discord/addon/settings/subreddits.js discord/addon/settings/updates.js \
+    discord/addon/settings/settings.js discord/addon/utils.js \
+    discord/addon/updates/update-functions.js \
+	discord/addon/settings/html/emotes.html discord/addon/settings/html/general.html \
+	discord/addon/settings/html/search.html discord/addon/settings/html/base-panel.html \
+	discord/addon/settings/html/subreddits.html discord/addon/settings/html/about.html \
+	discord/addon/settings/html/updates.html 
+
+DISCORD_UPDATES_SCRIPT := \
+	discord/addon/updates/update-functions.js discord/addon/updates/updates.js \
+    discord/addon/updates/updates.css discord/addon/utils.js
+
+DISCORD_SEARCH_SCRIPT := \
+	discord/addon/utils.js discord/addon/search/search.js discord/addon/search/search.css
+
+DISCORD_CORE_DATA := \
+	discord/addon/core/background.js discord/addon/core/core.js
+
+discord/core.js: $(DISCORD_CORE_DATA) $(ADDON_DATA)
+	mkdir -p build/discord/addon
+	
+	cp addon/bootstrap.css discord/addon/core/
+	cp addon/bpmotes.css discord/addon/core/
+	cp addon/combiners-nsfw.css discord/addon/core/
+	cp addon/extracss-pure.css discord/addon/core/
+	cp addon/extracss-webkit.css discord/addon/core/
+	cp addon/pref-setup.js discord/addon/core/
+	
+	cp build/betterponymotes.js discord/addon/core/
+	cp build/bpm-resources.js discord/addon/core/
+	cp build/emote-classes.css discord/addon/core/
+	cp build/gif-animotes.css discord/addon/core/
+
+	cd discord/addon && npm install
+	cd discord/addon && webpack core/core.js core.js
+
+	mv discord/addon/core.js build/discord/addon/
+
+discord/updates.js: $(DISCORD_UPDATES_SCRIPT)
+	mkdir -p build/discord
+	mkdir -p build/discord/addon
+	
+	cd discord/addon && npm install
+	cd discord/addon && webpack updates/updates.js updates.js
+	mv discord/addon/updates.js build/discord/addon/updates.js
+	
+	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/addon/updates.js
+
+discord/search.js: $(DISCORD_SEARCH_SCRIPT)
+	mkdir -p build/discord
+	mkdir -p build/discord/addon
+	
+	cd discord/addon && npm install
+	cd discord/addon && webpack search/search.js search.js
+	mv discord/addon/search.js build/discord/addon/search.js
+
+discord/settings.js: $(DISCORD_SETTINGS_SCRIPT)
+	mkdir -p build/discord
+	mkdir -p build/discord/addon
+	
+	cd discord/addon && npm install
+	cd discord/addon && webpack settings/settings.js settings.js
+	mv discord/addon/settings.js build/discord/addon/settings.js
+	
+	sed -i "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/addon/settings.js
+	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/addon/settings.js
+	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/addon/settings.js
+
+DISCORD_BPM_ASAR := discord/core.js discord/updates.js discord/search.js discord/settings.js
+
+discord/bpm.asar: $(DISCORD_BPM_ASAR)
+	mkdir -p build/discord
+	mkdir -p build/discord/addon
+	
+	asar pack build/discord/addon/ build/discord/bpm.asar
+	rm -rf build/discord/addon
 
 DISCORD_INSTALLER := \
     discord/installer/constants.js discord/installer/index.js discord/installer/package.json \
     discord/installer/install_mac.command discord/installer/install_windows.bat discord/installer/win_ps.ps1 \
     discord/installer/README.md
-
-DISCORD_INTEGRATION := \
-	discord/integration/package.json discord/integration/bpm.js discord/integration/bpm-settings.js \
-    discord/integration/bpm-search.js discord/integration/README.md
-
 # Note, requires node, globally installed asar (npm install asar -g)
-build/discord/installer: $(DISCORD_INSTALLER)
+discord/installer: $(DISCORD_INSTALLER)
 	mkdir -p build/discord
 	
 	for INSTALLER_FILE in $(DISCORD_INSTALLER); \
@@ -243,51 +310,11 @@ build/discord/installer: $(DISCORD_INSTALLER)
 	
 	cd build/discord && npm install
 
-build/discord/integration.asar: $(DISCORD_INTEGRATION)
+discord/integration.asar: $(DISCORD_INTEGRATION)
 	mkdir -p build/discord
 	asar pack discord/integration/ build/discord/integration.asar
 
-build/discord/bpm.asar: $(ADDON_DATA) $(DISCORD_ADDITONAL_DATA) $(DISCORD_SETTINGS_SCRIPT)
-	mkdir -p build/discord
-	mkdir -p build/discord/addon
-	
-	cat $(DISCORD_SETTINGS_SCRIPT) > build/discord/addon/settings.js
-	cp discord/addon/background.js build/discord/addon/background.js
-	cp discord/addon/search-button.js build/discord/addon/search-button.js
-	cp discord/addon/settings-wrapper.html build/discord/addon/settings-wrapper.html
-	cp discord/addon/general-settings.html build/discord/addon/general-settings.html
-	cp discord/addon/emote-settings.html build/discord/addon/emote-settings.html
-	cp discord/addon/subreddit-settings.html build/discord/addon/subreddit-settings.html
-	cp discord/addon/search-settings.html build/discord/addon/search-settings.html
-	cp discord/addon/about.html build/discord/addon/about.html
-	cp discord/addon/updates.html build/discord/addon/updates.html
-	
-	cp discord/addon/settings.css build/discord/addon/settings.css
-	cp discord/addon/search.css build/discord/addon/search.css
-	
-	sed -i "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/addon/about.html
-	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/addon/about.html
-	sed -i "s/\/\* REPLACE-WITH-DC-VERSION \*\//'$(DISCORD_VERSION)'/g" build/discord/addon/settings.js
-
-	cp build/betterponymotes.js build/discord/addon
-	cp build/bpm-resources.js build/discord/addon
-	cp build/emote-classes.css build/discord/addon
-	cp build/gif-animotes.css build/discord/addon
-	
-	cp addon/bootstrap.css build/discord/addon
-	cp addon/bpmotes.css build/discord/addon
-	cp addon/combiners-nsfw.css build/discord/addon
-	cp addon/extracss-pure.css build/discord/addon
-	cp addon/extracss-webkit.css build/discord/addon
-	cp addon/options.css build/discord/addon
-	cp addon/options.html build/discord/addon
-	cp addon/options.js build/discord/addon
-	cp addon/pref-setup.js build/discord/addon
-	
-	asar pack build/discord/addon/ build/discord/bpm.asar
-	rm -rf build/discord/addon
-
-discord: build/discord/installer build/discord/bpm.asar build/discord/integration.asar
+discord: discord/bpm.asar discord/integration.asar discord/installer
 
 #Ideally we'd also upload the 7z to the release, but that's notably more difficult than it would seem 
 discord/release: discord
@@ -298,6 +325,7 @@ discord/release: discord
 	if [ "$$DC_RELEASE_CONFIRM" != "y" ] && [ "$$DC_RELEASE_CONFIRM" != "Y" ]; then \
 		exit 1; \
 	fi
+	
 	#Push a tag to git
 	git tag -a "$(DISCORD_VERSION)" -m "Release of discord version $(DISCORD_VERSION)" 
 	git push origin $(DISCORD_VERSION) 

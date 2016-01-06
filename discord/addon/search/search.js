@@ -4,16 +4,9 @@
  *
  * Adds the search button to the discord UI
  **/
-(function() {
-//TODO: Move to utils
-function waitForElement(elementClass, callback) {
-    var element = document.getElementsByClassName(elementClass);
-    if(element.length == 0) {
-        window.setTimeout(function() { waitForElement(elementClass, callback); }, 100);
-    } else {
-        callback(element[0]);
-    }
-}
+require('!style!css!./search.css');
+
+var BPM_utils = require('../utils.js');
 
 function modifyHelpContainer(container) {
     container.className += ' bpm-help-container';
@@ -36,6 +29,5 @@ function createSearchButton(container) {
     container.insertBefore(searchButton, container.firstChild);
 }
 
-waitForElement('help-container', modifyHelpContainer);
-})();
+BPM_utils.waitForElementByClass('help-container', modifyHelpContainer);
 

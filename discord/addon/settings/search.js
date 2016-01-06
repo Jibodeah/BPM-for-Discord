@@ -4,11 +4,15 @@
  *
  * Search panel settings
  **/
-var BPM_searchSubpanel = {
-    init: null,
-    teardown: null
+
+module.exports = {
+    init: initSearchSubpanel,
+    teardown: teardownSearchSubpanel,
+    html: require('raw!./html/search.html')
 };
-(function() {
+
+var BPM_utils = require('../utils.js');
+
 function initSearchSubpanel(subpanel) {
     function initSearchPrefs(prefs) {
         var limitInput = document.getElementById('bpm-option-search-limit');
@@ -24,16 +28,14 @@ function initSearchSubpanel(subpanel) {
             }
 
             prefs.searchLimit = newValue;
-            BPM_setOption('searchLimit', newValue);
+            BPM_utils.setOption('searchLimit', newValue);
         });
     }
-    BPM_retreivePrefs(initSearchPrefs);
+    BPM_utils.retrievePrefs(initSearchPrefs);
 }
+
 function teardownSearchSubpanel(subpanel) {
     var limitInput = document.getElementById('bpm-option-search-limit');
     limitInput.removeEventListener('keydown'); 
 }
 
-BPM_searchSubpanel.init = initSearchSubpanel;
-BPM_searchSubpanel.teardown = teardownSearchSubpanel;
-})();

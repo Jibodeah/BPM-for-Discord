@@ -11,15 +11,12 @@
  **/
 module.exports = BPM;
 
-var path = require('path');
-var fs = require('fs');
-var settings = require('./bpm-settings');
-var search = require('./bpm-search');
+var path = require('path'),
+    fs = require('fs'),
+    bpmDir = getBpmDir(),
+    self;
 
-var self;
-var bpmDir = getDataDir();
-
-function getDataDir() {
+function getBpmDir() {
     switch(process.platform) {
         case 'win32':
             return path.join(process.env.APPDATA, 'discord', 'bpm');
@@ -37,65 +34,21 @@ function BPM(mainWindow) {
 
 BPM.prototype.init = function() {
     //self.mainWindow.webContents.openDevTools();
-    search.addSearch(self.mainWindow, getDataDir());
-    settings.addSettings(self.mainWindow, getDataDir());
-    addStyleListener(self.mainWindow);
-    addScripts(self.mainWindow);
+    getScripts().forEach(function(script) {
+        self.mainWindow.webContents.executeJavaScript(script);
+    });
 };
 
-function readContent(name) {
-    return fs.readFileSync(path.join(bpmDir, name), 'utf-8');
+function readAddonFile(filename) {
+    return fs.readFileSync(path.join(bpmDir, filename), 'utf-8');
 }
 
-function generateCssLoadCase(filename) {
-    var file = fs.readFileSync(path.join(bpmDir, filename), 'utf-8');
-    var cssText = file.replace(/\n/g, ' ');
-    cssText = cssText.replace(/'/g, "\\'");
-    var statement =
-    "   case '" + filename + "':\n" +
-    "       var node = document.createElement('style');\n" +
-    "       node.type = 'text/css';\n" +
-    "       node.appendChild(document.createTextNode('" + cssText +"'));\n" +
-    "       respondWithTag(node);\n" +
-    "       document.head.appendChild(node);\n" +
-    "       break;\n";
-    return statement;
-}
-
-function addStyleListener(mainWindow) {
-    var code =
-    "window.addEventListener('bpm_backend_message', function(event) {\n" +
-    "   function respondWithTag(element) {\n" +
-    "       var response = new CustomEvent('bpm_backend_message');\n" +
-    "       response.data = { method: 'css_tag_response', tag: element };\n" +
-    "       window.dispatchEvent(response);\n" +
-    "   }\n" +
-    "   if(event.data.method != 'insert_css') return;\n" +
-    "   switch(event.data.file) {\n" +
-        generateCssLoadCase('/emote-classes.css') +
-        generateCssLoadCase('/gif-animotes.css') +
-        generateCssLoadCase('/bootstrap.css') +
-        generateCssLoadCase('/bpmotes.css') +
-        generateCssLoadCase('/combiners-nsfw.css') +
-        generateCssLoadCase('/extracss-pure.css') +
-        generateCssLoadCase('/extracss-webkit.css') +
-    "   default:\n" +
-    "       console.log('Received unknown CSS file: ' + event.data.file);\n" +
-    "       break;\n" +
-    "   }\n" +
-    "});";
-    mainWindow.webContents.executeJavaScript(code);
-}
-
-function addScripts(mainWindow) {
-    var resourceScript = readContent('bpm-resources.js');
-    var prefsScript = readContent('pref-setup.js'); 
-    var backgroundScript = readContent('background.js');
-    var bpmScript = readContent('betterponymotes.js');
-
-    mainWindow.webContents.executeJavaScript(resourceScript);
-    mainWindow.webContents.executeJavaScript(prefsScript);
-    mainWindow.webContents.executeJavaScript(backgroundScript);
-    mainWindow.webContents.executeJavaScript(bpmScript);
+function getScripts() {
+    return [
+        readAddonFile('updates.js'),
+        readAddonFile('settings.js'),
+        readAddonFile('search.js'),
+        readAddonFile('core.js')
+    ];
 }
 

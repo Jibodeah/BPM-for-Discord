@@ -4,17 +4,43 @@
  *
  * Utility functions
  **/
+module.exports = {
+    htmlCollectionToArray: htmlCollectionToArray,
+    setOption: setOption,
+    retrievePrefs: retrievePrefs,
+    waitForElementById: waitForElementById,
+    waitForElementByClass: waitForElementByClass
+};
+
+function waitForElementByClass(elementClass, callback) {
+    var element = document.getElementsByClassName(elementClass);
+    if(element.length == 0) {
+        window.setTimeout(function() { waitForElementByClass(elementClass, callback); }, 100);
+    } else {
+        callback(element[0]);
+    }
+}
+
+function waitForElementById(id, callback) {
+    var element = document.getElementById(id);
+    if(!element) {
+        window.setTimeout(function() { waitForElementById(id, callback); }, 100);
+    } else {
+        callback(element);
+    }
+}
+
 function htmlCollectionToArray(coll) {
     return [].slice.call(coll);
 }
 
-function BPM_setOption(option, value) {
+function setOption(option, value) {
     var bpmEvent = new CustomEvent('bpm_message')
     bpmEvent.data = { method: 'set_pref', pref: option, value: value };
     window.dispatchEvent(bpmEvent);
 }
 
-function BPM_retreivePrefs(callback) {
+function retrievePrefs(callback) {
     var prefsListener = function(e) {
         var message = e.data;
         switch(message.method) {
@@ -29,3 +55,4 @@ function BPM_retreivePrefs(callback) {
     getPrefs.data = { method: 'get_prefs' };
     window.dispatchEvent(getPrefs);
 }
+

@@ -9,11 +9,6 @@
     margin: 0;
 }
 
-#bpm-new-version-button {
-    background-color: #738bd7;
-    font-size: 80%;
-}
-
 .bpm-info-span {
     display: block;
     margin-bottom: 10px;
@@ -44,5 +39,6 @@
 
 .bpm-emote-input {
     margin-right: 15px;
-    border-bottom 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
 }
+

@@ -1,8 +1,10 @@
 /*******************************************************************************
 **
-** This file is part of BetterPonymotes.
+** This file is part of BPM for Discord.
+** Copyright (c) 2015-2016 ByzantineFailure.
+** 
+** Much of this file is copy-pasted with some tweaks from BPM proper
 ** Copyright (c) 2012-2015 Typhos.
-** Copyright (c) 2015 ByzantineFailure.
 **
 ** This program is free software: you can redistribute it and/or modify it
 ** under the terms of the GNU Affero General Public License as published by
@@ -20,6 +22,11 @@
 *******************************************************************************/
 
 "use strict";
+
+var manage_prefs = require('./pref-setup').manage_prefs,
+    resources = require('./bpm-resources'),
+    sr_name2id = resources.sr_name2id;
+
 (function() {
 if(localStorage.prefs === undefined) {
     localStorage.prefs = "{}";

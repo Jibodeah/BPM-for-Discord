@@ -1,0 +1,40 @@
+/**
+ * BPM for Discord
+ * (c) 2015-2016 ByzantineFailure
+ *
+ * Core BPM code.  This code's requires rely on a lot of Makefile magic.
+ * The dependencies are built by the BPM core build process then moved here 
+ * before the webpack occurs.
+ **/
+
+var cssMap = {};
+cssMap['/emote-classes.css'] = require('raw!./emote-classes.css');
+cssMap['/gif-animotes.css'] = require('raw!./gif-animotes.css');
+cssMap['/bootstrap.css'] = require('raw!./bootstrap.css');
+cssMap['/bpmotes.css'] = require('raw!./bpmotes.css');
+cssMap['/combiners-nsfw.css'] = require('raw!./combiners-nsfw.css');
+cssMap['/extracss-pure.css'] = require('raw!./extracss-pure.css');
+cssMap['/extracss-webkit.css'] = require('raw!./extracss-webkit.css');
+
+window.addEventListener('bpm_backend_message', function(event) {
+    var message = event.data;
+    switch(message.method) {
+        case 'insert_css':
+            var css = cssMap[message.file];
+            var node = document.createElement('style');
+            node.type = 'text/css';
+            node.appendChild(document.createTextNode(css));
+            document.head.appendChild(node);    
+            break;
+        default:
+            console.log('BPM:  unrecognized backend message: ' + message.method);
+            break;
+    }
+});
+
+//Require BPM content in last
+require('./bpm-resources.js');
+require('./pref-setup.js');
+require('./background.js');
+require('./betterponymotes.js')
+

@@ -6,11 +6,14 @@
  * settings page.
  **/
 
-var BPM_subredditSettingsSubpanel = {
-    init: null,
-    teardown: null
+module.exports = {
+    init: BPM_initSubreddits,
+    teardown: BPM_teardownSubreddits,
+    html: require('raw!./html/subreddits.html')
 };
-(function() {
+
+var BPM_utils = require('../utils.js');
+
 function BPM_initSubreddits(subpanel) {
     function initSubredditPrefs(prefs) {
         var list = document.getElementById('bpm-subreddit-list');
@@ -18,8 +21,9 @@ function BPM_initSubreddits(subpanel) {
             list.appendChild(createCheckbox(key, prefs, !!prefs.enabledSubreddits2[key]));
         });
     }
-    BPM_retreivePrefs(initSubredditPrefs);
+    BPM_utils.retrievePrefs(initSubredditPrefs);
 }
+
 function createCheckbox(subredditName, prefs, checked) {
     var li = document.createElement('li');
     
@@ -52,7 +56,7 @@ function createClickHandler(subredditName, inputElement, prefs) {
         inputElement.checked = !inputElement.checked;
         var newValue = inputElement.checked ? 1 : 0;
         prefs.enabledSubreddits2[subredditName] = newValue;
-        BPM_setOption('enabledSubreddits2', prefs.enabledSubreddits2);
+        BPM_utils.setOption('enabledSubreddits2', prefs.enabledSubreddits2);
         console.log('clicked on subreddit ' + subredditName);
     };
     return handler;
@@ -60,12 +64,9 @@ function createClickHandler(subredditName, inputElement, prefs) {
 
 function BPM_teardownSubreddits(subpanel) {
     var list = document.getElementById('bpm-subreddit-list');
-    var inputs = htmlCollectionToArray(list.getElementsByTagName('input'));
+    var inputs = BPM_utils.htmlCollectionToArray(list.getElementsByTagName('input'));
     inputs.forEach(function(input) {
         input.nextElementSibling.removeEventListener('click');
     });
 }
 
-BPM_subredditSettingsSubpanel.init = BPM_initSubreddits;
-BPM_subredditSettingsSubpanel.teardown = BPM_teardownSubreddits;
-})();

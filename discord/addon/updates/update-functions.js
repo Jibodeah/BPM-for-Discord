@@ -1,20 +1,17 @@
 /**
  * BPM for Discord
  * (c) 2015-2016 ByzantineFailure
- * 
- * Updates panel handlers.  Version number inserted
- * during the build process (see Makefile).  Also creates
- * updates notification span and checker
+ *
+ * Functions for checking for updates and adding
+ * update notification elements/alerts
  **/
 
-var BPM_updatesSubpanel = {
-    init: null,
-    teardown: null
+module.exports = {
+    checkForUpdates: checkForUpdates
 };
-(function() {
-var UPDATE_INTERVAL_HOURS = 3;
-var codeVersion = /* REPLACE-WITH-DC-VERSION */;
-function BPM_checkForUpdates(createAlert) {
+
+var codeVersion = 'REPLACE-WITH-DC-VERSION';
+function checkForUpdates(createAlert) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://api.github.com/repos/ByzantineFailure/bpm/releases');
     xhr.onreadystatechange = function() {
@@ -58,7 +55,6 @@ function BPM_checkForUpdates(createAlert) {
     }
     xhr.send(null);
 }
-
 function addUpdatesNotifier(url) {
     var preexisting = document.getElementById('bpm-update-link');
     if(preexisting) {
@@ -85,27 +81,4 @@ function addUpdatesNotifier(url) {
     var container = document.querySelector('ul.guilds');
     container.insertBefore(li, container.firstChild);
 }
-
-function initUpdates(subpanel) {
-    var updateButton = document.getElementById('bpm-check-for-updates-button');
-    updateButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        BPM_checkForUpdates(true);
-    });
-}
-
-function teardownUpdates(subpanel) {
-    var updateButton = document.getElementById('bpm-check-for-updates-button');
-    updateButton.removeEventListener('click');
-}
-
-function backgroundUpdateCheck() {
-    BPM_checkForUpdates(false);
-    window.setTimeout(backgroundUpdateCheck, 1000 * 60 * 60 * UPDATE_INTERVAL_HOURS);
-}
-
-BPM_updatesSubpanel.init = initUpdates;
-BPM_updatesSubpanel.teardown = teardownUpdates;
-backgroundUpdateCheck();
-})();
 

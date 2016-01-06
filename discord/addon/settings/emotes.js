@@ -9,11 +9,15 @@
  * elements, Discord's bugswat code will detect it and 
  * force a hard refresh of its window.
  **/
-var BPM_emoteSettingsSubpanel = {
-    init: null,
-    teardown: null
+
+module.exports = {
+    init: BPM_initEmoteSettings,
+    teardown: BPM_cleanEmoteSettings,
+    html: require('raw!./html/emotes.html')
 };
-(function() {
+
+var BPM_utils = require('../utils.js');
+
 function BPM_initEmoteSettings(subpanel) {
     function initEmotePrefs(prefs) {
         var whitelist = prefs.whitelistedEmotes;
@@ -46,7 +50,7 @@ function BPM_initEmoteSettings(subpanel) {
             }
 
             prefs.disabledEmotes.push(toAdd);
-            BPM_setOption('disabledEmotes', prefs.disabledEmotes);
+            BPM_utils.setOption('disabledEmotes', prefs.disabledEmotes);
             BPM_addEmoteListEntry(toAdd, blacklistNode, prefs);
             return false;
         });
@@ -64,7 +68,7 @@ function BPM_initEmoteSettings(subpanel) {
             }
 
             prefs.whitelistedEmotes.push(toAdd);
-            BPM_setOption('whitelistedEmotes', prefs.whitelistedEmotes);
+            BPM_utils.setOption('whitelistedEmotes', prefs.whitelistedEmotes);
             BPM_addEmoteListEntry(toAdd, whitelistNode, prefs);
             return false;
         });
@@ -76,7 +80,7 @@ function BPM_initEmoteSettings(subpanel) {
             e.preventDefault();
             BPM_removeEmoteSettingsSpans(blacklistNode); 
             prefs.disabledEmotes = [];
-            BPM_setOption('disabledEmotes', []);
+            BPM_utils.setOption('disabledEmotes', []);
             return false;
         });
 
@@ -84,11 +88,11 @@ function BPM_initEmoteSettings(subpanel) {
             e.preventDefault();
             BPM_removeEmoteSettingsSpans(whitelistNode); 
             prefs.whitelistedEmotes = [];
-            BPM_setOption('whitelistedEmotes', []);
+            BPM_utils.setOption('whitelistedEmotes', []);
             return false;
         });
     }
-    BPM_retreivePrefs(initEmotePrefs);
+    BPM_utils.retrievePrefs(initEmotePrefs);
 }
 
 function BPM_prepEmoteName(name) {
@@ -106,7 +110,7 @@ function BPM_removeEmotePreferenceEntry(name, whitelist, prefs) {
         return;
     }
     prefs[prefName].splice(index, 1);
-    BPM_setOption(prefName, prefs[prefName]);
+    BPM_utils.setOption(prefName, prefs[prefName]);
 }
 
 function BPM_addEmoteListEntry(name, addTo, prefs) {
@@ -124,7 +128,7 @@ function BPM_addEmoteListEntry(name, addTo, prefs) {
 }
 
 function BPM_removeEmoteSettingsSpans(target) {
-    var spans = htmlCollectionToArray(target.getElementsByTagName('span'));
+    var spans = BPM_utils.htmlCollectionToArray(target.getElementsByTagName('span'));
     spans.forEach(function(span) {
         span.removeEventListener('click');
         target.removeChild(span);
@@ -147,8 +151,4 @@ function BPM_cleanEmoteSettings(subpanel) {
     clearBlacklistButton.removeEventListener('click');
     clearWhitelistButton.removeEventListener('click');
 }
-
-BPM_emoteSettingsSubpanel.init = BPM_initEmoteSettings
-BPM_emoteSettingsSubpanel.teardown = BPM_cleanEmoteSettings
-})();
 
