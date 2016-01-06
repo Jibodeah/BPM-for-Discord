@@ -15,8 +15,9 @@ Eventually once [the core repo PR](https://github.com/Rothera/bpm/pull/12) is me
 ## Build
 
 Building BPM for Discord requires:
-* Node.js `v4.2.x`
-* `asar` -- this can be acquired via `npm install -g asar`
+* [Node.js](https://nodejs.org/en/download/) `v4.2.x`
+* [`webpack`](https://www.npmjs.com/package/webpack) -- this can be acquired via `npm install -g webpack`
+* [`asar`](https://www.npmjs.com/package/asar) -- this can be acquired via `npm install -g asar`
 
 The following build hooks are available:
 * `make discord`
@@ -27,11 +28,10 @@ The following build hooks are available:
 1. Moves all files from `discord/installer` to `build/discord`
 2. Packs all files from `discord/integration` into `integration.asar` and moves it to `build/discord/integration.asar`
 3. Builds all BPM content and scripts
-4. Moves all files from `build/addon` into `build/discord/addon`
-5. Concatenates all settings scripts from `discord/addon` into a single `settings.js` and moves it to `build/discord/addon/settings.js`
-6. Moves all other scripts and files from `discord/addon` to `build/discord/addon`
-7. Find/Replace-s the current version numbers into `build/discord/addon/about.html` and `build/discord/about/updates.js` 
-8. Packs `build/discord/addon` into `build/discord/bpm.asar`
+4. Moves required addon files from `build/addon` to `build/discord/addon/core` to support building `core.js`
+5. Builds all content scripts via Webpack and moves them to `build/discord/addon`
+5. Find/Replace-s the current version numbers into `build/discord/addon/settings.js` and `build/discord/addon/updates.js` 
+6. Compiles `build/discord/addon` to `build/discord/bpm.asar`
 9. Deletes `build/discord/addon`
 
 The final contents of `build/discord` should now look like this:
