@@ -1,5 +1,7 @@
 $node_url = "https://nodejs.org/dist/v4.2.4/win-x86/node.exe"
 $node_output = "./node.exe"
+$installer_directory = split-path -parent $MyInvocation.MyCommand.Definition
+$install_script = $installer_directory + '\index.js'
 
 function Download-Node
 {
@@ -13,6 +15,9 @@ function Download-Node
         Write-Host "Downloading Node.js v4.2.4 standalone binary..."
         $wc = New-Object System.Net.WebClient
         $wc.DownloadFile($node_url, $node_output)
+        Write-Host "Removing downloaded node binary..."
+        & $node_output $install_script $install_directory
+        Remove-Item $node_output
     } else {
         Write-Host "Input was not 'y' or 'Y', quitting without installing BPM..."
         exit
@@ -26,23 +31,16 @@ if (Get-Command node.exe -errorAction SilentlyContinue)
     $node_version = $node_version.trim()
     if ($node_version -like "*v4.2*") {
         Write-Host "Version is v4.2.x, running installer..."
-        node.exe index.js
+        node.exe $install_script $install_directory
     }
     else
     {
-        Write-Host "Found version $node_version, not a v4.2.x."
         Download-Node
-        & $node_output index.js
-        Remove-Item $node_output
     }
 }
 else
 {
     Write-Host "Cannot find node on PATH"
     Download-Node
-    Write-Host "Downloaded node binary, running installer..."
-    & $node_output index.js
-    Write-Host "Removing downloaded node binary..."
-    Remove-Item $node_output
 }
 
