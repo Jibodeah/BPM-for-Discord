@@ -15,8 +15,9 @@ function Download-Node
         Write-Host "Downloading Node.js v4.2.4 standalone binary..."
         $wc = New-Object System.Net.WebClient
         $wc.DownloadFile($node_url, $node_output)
-        Write-Host "Removing downloaded node binary..."
+        Write-Host "Running installer..."
         & $node_output $install_script $install_directory
+        Write-Host "Removing downloaded node binary..."
         Remove-Item $node_output
     } else {
         Write-Host "Input was not 'y' or 'Y', quitting without installing BPM..."
