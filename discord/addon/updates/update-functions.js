@@ -10,10 +10,12 @@ module.exports = {
     checkForUpdates: checkForUpdates
 };
 
+var releasesUrl = 'https://api.github.com/repos/ByzantineFailure/BPM-for-Discord/releases'
 var codeVersion = 'REPLACE-WITH-DC-VERSION';
+
 function checkForUpdates(createAlert) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://api.github.com/repos/ByzantineFailure/bpm/releases');
+    xhr.open('GET', releasesUrl);
     xhr.onreadystatechange = function() {
         if(xhr.readyState != 4) return;
         if(xhr.status !== 200 && xhr.status !== 304) {

@@ -270,7 +270,7 @@ discord/search.js: $(DISCORD_SEARCH_SCRIPT)
 	mkdir -p build/discord
 	mkdir -p build/discord/addon
 	
-	cd discord/addon && npm install
+	cd discord/addon && npm install 
 	cd discord/addon && webpack search/search.js search.js
 	mv discord/addon/search.js build/discord/addon/search.js
 
@@ -308,7 +308,7 @@ discord/installer: $(DISCORD_INSTALLER)
 		cp $$INSTALLER_FILE build/discord/; \
 	done
 	
-	cd build/discord && npm install
+	cd build/discord && npm install --production
 
 discord/integration.asar: $(DISCORD_INTEGRATION)
 	mkdir -p build/discord

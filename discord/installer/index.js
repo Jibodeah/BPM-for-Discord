@@ -1,6 +1,7 @@
 /**
  * Typhos' BPM for Discord Installer
- * (c) 2015 ByzantineFailure
+ * (c) 2015-2016 ByzantineFailure
+ *
  * Heavily influenced by the BetterDiscord project:
  * https://github.com/Jiiks/BetterDiscordApp
  * Dwarves on the shoulders of giants and all that.
@@ -11,13 +12,7 @@ var _ = require('lodash');
 var asar = require('asar');
 var fs = require('fs-extra');
 var path = require('path');
-var readline = require('readline');
 var constants = require('./constants');
-
-var rl = new readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
 
 var os = process.platform;
 var extractPath = path.join(getDiscordPath(), 'bpm_extract');
@@ -31,15 +26,11 @@ var integrationSourcePath = path.join(rootPath, 'integration.asar');
 console.log('path is ' + packPath);
 console.log('addonpath is ' + getBpmDataPath());
 
-rl.prompt('Press enter');
-
 extractAddonCode();
 extractApp(getDiscordPath());
 addPackageDependency(extractPath);
 injectBpm(getDiscordPath());
 packApp(getDiscordPath());
-
-rl.prompt('Press enter');
 
 function getDiscordPath() {
     switch(os) {
