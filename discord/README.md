@@ -15,6 +15,7 @@ Eventually once [the core repo PR](https://github.com/Rothera/bpm/pull/12) is me
 ## Build
 
 Building BPM for Discord requires:
+* Getting the BPM build chain working (Python2, Python3, Mozilla tools, see the base README.md)
 * [Node.js](https://nodejs.org/en/download/) `v4.2.x`
 * [`webpack`](https://www.npmjs.com/package/webpack) -- this can be acquired via `npm install -g webpack`
 * [`asar`](https://www.npmjs.com/package/asar) -- this can be acquired via `npm install -g asar`
