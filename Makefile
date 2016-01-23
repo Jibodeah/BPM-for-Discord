@@ -300,7 +300,7 @@ discord/bpm.asar: $(DISCORD_BPM_ASAR)
 DISCORD_INSTALLER := \
     discord/installer/constants.js discord/installer/index.js discord/installer/package.json \
     discord/installer/install_mac.command discord/installer/install_windows.bat discord/installer/win_ps.ps1 \
-    discord/installer/README.md
+    discord/installer/install_windows_PTB.bat discord/installer/README.md
 # Note, requires node, globally installed asar (npm install asar -g)
 discord/installer: $(DISCORD_INSTALLER)
 	mkdir -p build/discord
