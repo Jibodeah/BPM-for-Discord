@@ -17,13 +17,12 @@ function initSearchSubpanel(subpanel) {
     function initSearchPrefs(prefs) {
         var limitInput = document.getElementById('bpm-option-search-limit');
         limitInput.value = prefs.searchLimit;
-        limitInput.addEventListener('keydown', function(e) {
-            if(e.keyCode != 13) return;
+        limitInput.addEventListener('blur', function(e) {
             e.preventDefault();
             
             var newValue = parseInt(limitInput.value);
             if(!newValue || newValue < 0) {
-                alert('Search limit must be positive integer');
+                alert('Search limit must be a positive integer');
                 return;
             }
 
@@ -36,6 +35,6 @@ function initSearchSubpanel(subpanel) {
 
 function teardownSearchSubpanel(subpanel) {
     var limitInput = document.getElementById('bpm-option-search-limit');
-    limitInput.removeEventListener('keydown'); 
+    limitInput.removeEventListener('blur'); 
 }
 
