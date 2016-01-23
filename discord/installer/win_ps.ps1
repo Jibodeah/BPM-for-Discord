@@ -1,10 +1,13 @@
+param (
+    [switch]$isPTB = $false
+)
+
 $node_url = "https://nodejs.org/dist/v4.2.4/win-x86/node.exe"
 $node_output = "./node.exe"
 $installer_directory = split-path -parent $MyInvocation.MyCommand.Definition
 $install_script = $installer_directory + '\index.js'
 
-function Download-Node
-{
+function Download-Node {
     Write-Host "The installer could not find a 4.2.x install of Node.js.  This is needed to"
     Write-Host "run the install script.  Is it okay to download a standalone version of"
     Write-Host "Node.js v4.2.4 (about 11 MB) to run the install script then delete it right"
@@ -16,7 +19,11 @@ function Download-Node
         $wc = New-Object System.Net.WebClient
         $wc.DownloadFile($node_url, $node_output)
         Write-Host "Running installer..."
-        & $node_output $install_script $install_directory
+        if($isPTB) {
+            & $node_output $install_script $installer_directory isPTB
+        } else {
+            & $node_output $install_script $installer_directory
+        }
         Write-Host "Removing downloaded node binary..."
         Remove-Item $node_output
     } else {
@@ -25,22 +32,21 @@ function Download-Node
     }
 }
 
-if (Get-Command node.exe -errorAction SilentlyContinue)
-{
+if (Get-Command node.exe -errorAction SilentlyContinue) {
     Write-Host "Found node on path, checking version..."
     $node_version = (node --version) | Out-String
     $node_version = $node_version.trim()
     if ($node_version -like "*v4.2*") {
         Write-Host "Version is v4.2.x, running installer..."
-        node.exe $install_script $install_directory
-    }
-    else
-    {
+        if($isPTB) {
+            node.exe $install_script $installer_directory isPTB
+        } else {
+            node.exe $install_script $installer_directory
+        }
+    } else {
         Download-Node
     }
-}
-else
-{
+} else {
     Write-Host "Cannot find node on PATH"
     Download-Node
 }

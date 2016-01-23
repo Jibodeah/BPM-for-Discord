@@ -6,6 +6,7 @@
  * https://github.com/Jiiks/BetterDiscordApp
  * Dwarves on the shoulders of giants and all that.
  **/
+//NOTE:  This entire file is becoming a mess and I should _really_ revisit it
 "use strict";
 
 var _ = require('lodash');
@@ -18,13 +19,16 @@ var os = process.platform;
 var extractPath = path.join(getDiscordPath(), 'bpm_extract');
 var packPath = path.join(getDiscordPath(), 'app.asar');
 
-var rootPath = process.argv.length > 2 ? process.argv[2] : '.';
+//I hate this and should probably include an args lib at some point
+var rootPath = process.argv.length > 2 && process.argv[2] != 'isPTB' ? process.argv[2] : '.';
 
 var addonSourcePath = path.join(rootPath, 'bpm.asar');
 var integrationSourcePath = path.join(rootPath, 'integration.asar');
 
+console.log('args are ' + JSON.stringify(process.argv, null, ' '));
 console.log('path is ' + packPath);
 console.log('addonpath is ' + getBpmDataPath());
+console.log('datapath is ' + rootPath);
 
 extractAddonCode();
 extractApp(getDiscordPath());
@@ -33,9 +37,11 @@ injectBpm(getDiscordPath());
 packApp(getDiscordPath());
 
 function getDiscordPath() {
+    var isPTB = process.argv.indexOf('isPTB') >= 0;
     switch(os) {
         case 'win32':
-            var discordFolder = path.join(process.env.LOCALAPPDATA, 'Discord');
+            var localDataFolder = isPTB ? 'DiscordPTB' : 'Discord';
+            var discordFolder = path.join(process.env.LOCALAPPDATA, localDataFolder);
             var contents = fs.readdirSync(discordFolder);
             //Consider this carefully, we may want to fail on a new version
             var folder = _(contents)
