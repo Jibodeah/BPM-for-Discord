@@ -6,6 +6,7 @@
  **/
 module.exports = {
     htmlCollectionToArray: htmlCollectionToArray,
+    getElementsByClassName: getElementsByClassName,
     setOption: setOption,
     retrievePrefs: retrievePrefs,
     waitForElementById: waitForElementById,
@@ -28,6 +29,11 @@ function waitForElementById(id, callback) {
     } else {
         callback(element);
     }
+}
+
+function getElementsByClassName(className) {
+    var elements = document.getElementsByClassName(className);
+    return htmlCollectionToArray(elements);
 }
 
 function htmlCollectionToArray(coll) {

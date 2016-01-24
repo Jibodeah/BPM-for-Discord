@@ -7,6 +7,8 @@
  * before the webpack occurs.
  **/
 
+var utils = require('../utils');
+
 var cssMap = {};
 cssMap['/emote-classes.css'] = require('raw!./emote-classes.css');
 cssMap['/gif-animotes.css'] = require('raw!./gif-animotes.css');
@@ -15,6 +17,14 @@ cssMap['/bpmotes.css'] = require('raw!./bpmotes.css');
 cssMap['/combiners-nsfw.css'] = require('raw!./combiners-nsfw.css');
 cssMap['/extracss-pure.css'] = require('raw!./extracss-pure.css');
 cssMap['/extracss-webkit.css'] = require('raw!./extracss-webkit.css');
+
+function getChatInputTextarea() {
+    var sendbox = utils.getElementsByClassName('channel-textarea-inner');
+    if(sendbox.length == 0) {
+        return null;
+    }
+    return utils.htmlCollectionToArray(sendbox[0].getElementsByTagName('textarea'))[0];
+}
 
 window.addEventListener('bpm_backend_message', function(event) {
     var message = event.data;
@@ -26,8 +36,17 @@ window.addEventListener('bpm_backend_message', function(event) {
             node.appendChild(document.createTextNode(css));
             document.head.appendChild(node);    
             break;
+        //We may consider perhaps making this an option instead.
+        case 'insert_emote':
+            var chatbox = getChatInputTextarea();
+            if(!chatbox) {
+                console.log('Cannot add search emote "' + message.emote + '", chat textarea does not exist');
+                return;
+            }
+            chatbox.value = chatbox.value + "[](" + message.emote + ")";
+            break;
         default:
-            console.log('BPM:  unrecognized backend message: ' + message.method);
+            console.log('BPM: unrecognized discord message: ' + message.method);
             break;
     }
 });
