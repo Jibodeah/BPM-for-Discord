@@ -42,9 +42,7 @@ VERSION = 66.265
 # - Flag pre-release as ready, edited and good to go 
 # - Notify interested parties
 
-VERSION = 66.241
-
-DISCORD_VERSION = discord-v0.6.1-beta
+DISCORD_VERSION = discord-v0.7.1-beta
 
 CONTENT_SCRIPT := \
     addon/bpm-header.js addon/bpm-utils.js addon/bpm-browser.js \
@@ -329,12 +327,12 @@ discord/release: discord
 	fi
 	
 	#Push a tag to git
-	git tag -a "$(DISCORD_VERSION)" -m "Release of discord version $(DISCORD_VERSION)" 
-	git push origin $(DISCORD_VERSION) 
+	#git tag -a "$(DISCORD_VERSION)" -m "Release of discord version $(DISCORD_VERSION)" 
+	#git push origin $(DISCORD_VERSION) 
 	
 	#Create a 7z archive
 	rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z
-	7z a ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z -r ./build/discord/*
+	7z a ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z -r ./build/discord
 	
 	#I'm leaving the password-protected code here just in case
 	#Mac doesn't have a good 7z client that handles password protected so we create a zip.
