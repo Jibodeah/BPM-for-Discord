@@ -327,8 +327,8 @@ discord/release: discord
 	fi
 	
 	#Push a tag to git
-	#git tag -a "$(DISCORD_VERSION)" -m "Release of discord version $(DISCORD_VERSION)" 
-	#git push origin $(DISCORD_VERSION) 
+	git tag -a "$(DISCORD_VERSION)" -m "Release of discord version $(DISCORD_VERSION)" 
+	git push origin $(DISCORD_VERSION) 
 	
 	#Create a 7z archive
 	rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z
