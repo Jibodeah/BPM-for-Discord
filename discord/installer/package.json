@@ -11,7 +11,8 @@
   "dependencies": {
     "asar": "~0.9.0",
     "fs-extra": "~0.26.3",
-    "lodash": "^3.10.1"
+    "minimist": "~1.2.0",
+    "lodash": "^4.3.0"
   },
   "devDependencies": {
     "jshint": "latest"
