@@ -42,10 +42,7 @@ VERSION = 66.265
 # - Flag pre-release as ready, edited and good to go 
 # - Notify interested parties
 
-DISCORD_VERSION = discord-v0.7.1-beta
-
-#Phony target we can use to force things to build every run
-FORCE: 
+DISCORD_VERSION = discord-v0.7.2-beta
 
 CONTENT_SCRIPT := \
     addon/bpm-header.js addon/bpm-utils.js addon/bpm-browser.js \
@@ -304,6 +301,9 @@ DISCORD_INSTALLER_LIB := discord/installer/lib/addon.js discord/installer/lib/in
 DISCORD_INSTALLER := discord/installer/index.js discord/installer/package.json \
     discord/installer/install_mac.command discord/installer/install_windows.bat discord/installer/win_ps.ps1 \
     discord/installer/install_windows_PTB.bat discord/installer/README.md
+
+#Phony target we can use to force things to build every run
+FORCE: 
 
 # Note, requires node, globally installed asar (npm install asar -g)
 discord/installer: FORCE $(DISCORD_INSTALLER) $(DISCORD_INSTALLER_LIB)
