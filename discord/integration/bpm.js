@@ -1,13 +1,12 @@
 /**
  * Main object for integrating Typhos' BetterPonymotes with Discord
- * (c) 2015 ByzantineFailure
+ * (c) 2015-2016 ByzantineFailure
  *
  * Many much thanks to BetterDiscord, from which a lot of ideas
  * are cribbed.
  * https://github.com/Jiiks/BetterDiscordApp
  *
- * Injects our scripts and styles then triggers any submodule code
- * (e.g. settings)
+ * Runs all our compiled code in Discord's Electron environment
  **/
 module.exports = BPM;
 
@@ -34,8 +33,9 @@ function BPM(mainWindow) {
 
 BPM.prototype.init = function() {
     //self.mainWindow.webContents.openDevTools();
+    var scripts = getScripts();
     self.mainWindow.webContents.on('dom-ready', function() {
-        getScripts().forEach(function(script) {
+        scripts.forEach(function(script) {
             self.mainWindow.webContents.executeJavaScript(script);
         });
     });

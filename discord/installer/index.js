@@ -20,9 +20,9 @@ if(!sourceRoot) {
     return;
 }
 
-var paths = require('./paths').getPaths(sourceRoot, isPTB),
-    integration = require('./integration'),
-    addon = require('./addon');
+var paths = require('./lib/paths').getPaths(sourceRoot, isPTB),
+    integration = require('./lib/integration'),
+    addon = require('./lib/addon');
 
 console.log('Paths results are:');
 console.log(JSON.stringify(paths, null, ' '));

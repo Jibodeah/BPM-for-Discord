@@ -1,3 +1,10 @@
+/**
+ * BPM for Discord Installer
+ * (c) 2015-2016 ByzantineFailure
+ *
+ * Constants for use in the installer
+ **/
+
 "use strict";
 module.exports = {
     bpmVersion: '^0.0.1',

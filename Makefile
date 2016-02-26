@@ -44,6 +44,9 @@ VERSION = 66.265
 
 DISCORD_VERSION = discord-v0.7.1-beta
 
+#Phony target we can use to force things to build every run
+FORCE: 
+
 CONTENT_SCRIPT := \
     addon/bpm-header.js addon/bpm-utils.js addon/bpm-browser.js \
     addon/bpm-store.js addon/bpm-search.js addon/bpm-inject.js \
@@ -295,25 +298,36 @@ discord/bpm.asar: $(DISCORD_BPM_ASAR)
 	asar pack build/discord/addon/ build/discord/bpm.asar
 	rm -rf build/discord/addon
 
-DISCORD_INSTALLER := \
-    discord/installer/constants.js discord/installer/index.js discord/installer/package.json \
-    discord/installer/addon.js discord/installer/integration.js discord/installer/paths.js \
+DISCORD_INSTALLER_LIB := discord/installer/lib/addon.js discord/installer/lib/integration.js discord/installer/lib/paths.js \
+    discord/installer/lib/constants.js
+
+DISCORD_INSTALLER := discord/installer/index.js discord/installer/package.json \
     discord/installer/install_mac.command discord/installer/install_windows.bat discord/installer/win_ps.ps1 \
     discord/installer/install_windows_PTB.bat discord/installer/README.md
+
 # Note, requires node, globally installed asar (npm install asar -g)
-discord/installer: $(DISCORD_INSTALLER)
+discord/installer: FORCE $(DISCORD_INSTALLER) $(DISCORD_INSTALLER_LIB)
 	mkdir -p build/discord
+	mkdir -p build/discord/lib	
 	
 	for INSTALLER_FILE in $(DISCORD_INSTALLER); \
 	do \
 		cp $$INSTALLER_FILE build/discord/; \
 	done
 	
+	for INSTALLER_FILE in $(DISCORD_INSTALLER_LIB); \
+	do \
+		cp $$INSTALLER_FILE build/discord/lib; \
+	done	
+	
 	cd build/discord && npm install --production
 
 discord/integration.asar: $(DISCORD_INTEGRATION)
 	mkdir -p build/discord
 	asar pack discord/integration/ build/discord/integration.asar
+
+clean/discord:
+	rm -rf build/discord
 
 discord: discord/bpm.asar discord/integration.asar discord/installer
 
