@@ -22,7 +22,9 @@ function getPaths(sourceRoot, isPTB) {
         discordBackup: path.join(discordPath, 'app.asar.clean'),
         integrationSource: path.join(sourceRoot, 'integration.asar'),
         addonSource: path.join(sourceRoot, 'bpm.asar'),
-        addonExtract: path.join(getAddonExtractPath(), 'bpm')
+        addonExtract: path.join(getAddonExtractPath(), 'bpm'),
+        addonCustom: path.join(getAddonExtractPath(), 'bpm', 'custom'),
+        addonCustomBackup: path.join(getAddonExtractPath(), '..', 'bpm_custom.bak')
     };
 }
 

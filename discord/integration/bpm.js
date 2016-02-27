@@ -45,12 +45,23 @@ function readAddonFile(filename) {
     return fs.readFileSync(path.join(bpmDir, filename), 'utf-8');
 }
 
+function getCustomScripts() {
+    return fs.readdirSync(path.join(bpmDir, 'custom'))
+        .filter(function(filename) { return filename.endsWith('.js'); })
+        .map(function(filename) { return readCustomFile(filename); });
+}
+
+function readCustomFile(filename) {
+    return fs.readFileSync(path.join(bpmDir, 'custom', filename), 'utf-8');
+}
+
 function getScripts() {
     return [
         readAddonFile('updates.js'),
         readAddonFile('settings.js'),
         readAddonFile('search.js'),
         readAddonFile('core.js')
-    ];
+    ]
+    .concat(getCustomScripts());
 }
 
