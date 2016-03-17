@@ -42,7 +42,7 @@ VERSION = 66.265
 # - Flag pre-release as ready, edited and good to go 
 # - Notify interested parties
 
-DISCORD_VERSION = discord-v0.8.0-beta
+DISCORD_VERSION = discord-v0.8.1-beta
 
 CONTENT_SCRIPT := \
     addon/bpm-header.js addon/bpm-utils.js addon/bpm-browser.js \
