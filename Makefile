@@ -233,10 +233,34 @@ DISCORD_UPDATES_SCRIPT := \
 DISCORD_SEARCH_SCRIPT := \
 	discord/addon/utils.js discord/addon/search/search.js discord/addon/search/search.css
 
-DISCORD_CORE_DATA := \
+DISCORD_CORE_SCRIPT := \
 	discord/addon/core/background.js discord/addon/core/core.js
 
-discord/core.js: $(DISCORD_CORE_DATA) $(ADDON_DATA)
+DISCORD_ADDON_SCRIPT := $(DISCORD_CORE_DATA) $(DISCORD_SEARCH_SCRIPT) $(DISCORD_UPDATES_SCRIPT) \
+                        $(DISCORD_SETTINGS_SCRIPT) $(ADDON_DATA)
+
+discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
+	mkdir -p build/discord/addon
+	
+	cp addon/bootstrap.css discord/addon/core/
+	cp addon/bpmotes.css discord/addon/core/
+	cp addon/combiners-nsfw.css discord/addon/core/
+	cp addon/extracss-pure.css discord/addon/core/
+	cp addon/extracss-webkit.css discord/addon/core/
+	cp addon/pref-setup.js discord/addon/core/
+	cp build/betterponymotes.js discord/addon/core/
+	cp build/bpm-resources.js discord/addon/core/
+	cp build/emote-classes.css discord/addon/core/
+	cp build/gif-animotes.css discord/addon/core/
+	
+	cd discord/addon && npm install
+	cd discord/addon && webpack bpm.js ../../build/discord/addon/bpm.js
+	
+	sed -i "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/addon/bpm.js
+	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/addon/bpm.js
+	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/addon/bpm.js
+
+discord/core.js: $(DISCORD_CORE_SCRIPT) $(ADDON_DATA)
 	mkdir -p build/discord/addon
 	
 	cp addon/bootstrap.css discord/addon/core/
@@ -255,6 +279,8 @@ discord/core.js: $(DISCORD_CORE_DATA) $(ADDON_DATA)
 	cd discord/addon && webpack core/core.js core.js
 
 	mv discord/addon/core.js build/discord/addon/
+
+discord/versions: 
 
 discord/updates.js: $(DISCORD_UPDATES_SCRIPT)
 	mkdir -p build/discord
@@ -286,7 +312,7 @@ discord/settings.js: $(DISCORD_SETTINGS_SCRIPT)
 	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/addon/settings.js
 	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/addon/settings.js
 
-DISCORD_BPM_ASAR := discord/core.js discord/updates.js discord/search.js discord/settings.js
+DISCORD_BPM_ASAR := discord/bpm.js #discord/core.js discord/updates.js discord/search.js discord/settings.js
 
 discord/bpm.asar: $(DISCORD_BPM_ASAR)
 	mkdir -p build/discord
