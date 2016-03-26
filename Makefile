@@ -260,61 +260,7 @@ discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
 	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/addon/bpm.js
 	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/addon/bpm.js
 
-discord/core.js: $(DISCORD_CORE_SCRIPT) $(ADDON_DATA)
-	mkdir -p build/discord/addon
-	
-	cp addon/bootstrap.css discord/addon/core/
-	cp addon/bpmotes.css discord/addon/core/
-	cp addon/combiners-nsfw.css discord/addon/core/
-	cp addon/extracss-pure.css discord/addon/core/
-	cp addon/extracss-webkit.css discord/addon/core/
-	cp addon/pref-setup.js discord/addon/core/
-	
-	cp build/betterponymotes.js discord/addon/core/
-	cp build/bpm-resources.js discord/addon/core/
-	cp build/emote-classes.css discord/addon/core/
-	cp build/gif-animotes.css discord/addon/core/
-
-	cd discord/addon && npm install
-	cd discord/addon && webpack core/core.js core.js
-
-	mv discord/addon/core.js build/discord/addon/
-
-discord/versions: 
-
-discord/updates.js: $(DISCORD_UPDATES_SCRIPT)
-	mkdir -p build/discord
-	mkdir -p build/discord/addon
-	
-	cd discord/addon && npm install
-	cd discord/addon && webpack updates/updates.js updates.js
-	mv discord/addon/updates.js build/discord/addon/updates.js
-	
-	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/addon/updates.js
-
-discord/search.js: $(DISCORD_SEARCH_SCRIPT)
-	mkdir -p build/discord
-	mkdir -p build/discord/addon
-	
-	cd discord/addon && npm install 
-	cd discord/addon && webpack search/search.js search.js
-	mv discord/addon/search.js build/discord/addon/search.js
-
-discord/settings.js: $(DISCORD_SETTINGS_SCRIPT)
-	mkdir -p build/discord
-	mkdir -p build/discord/addon
-	
-	cd discord/addon && npm install
-	cd discord/addon && webpack settings/settings.js settings.js
-	mv discord/addon/settings.js build/discord/addon/settings.js
-	
-	sed -i "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/addon/settings.js
-	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/addon/settings.js
-	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/addon/settings.js
-
-DISCORD_BPM_ASAR := discord/bpm.js #discord/core.js discord/updates.js discord/search.js discord/settings.js
-
-discord/bpm.asar: $(DISCORD_BPM_ASAR)
+discord/bpm.asar: discord/bpm.js
 	mkdir -p build/discord
 	mkdir -p build/discord/addon
 	
@@ -355,7 +301,14 @@ discord/integration.asar: $(DISCORD_INTEGRATION)
 clean/discord:
 	rm -rf build/discord
 
-discord: discord/bpm.asar discord/integration.asar discord/installer
+discord/better-discord: discord/bpm.js
+	mkdir -p build/better-discord
+	rm -f build/better-discord/bpm.js
+	cat discord/better-discord/plugin-head.js >> build/better-discord/bpm.js
+	cat build/discord/addon/bpm.js >> build/better-discord/bpm.js
+	cat discord/better-discord/plugin-foot.js >> build/better-discord/bpm.js
+
+discord: discord/better-discord discord/bpm.asar discord/integration.asar discord/installer
 
 #Ideally we'd also upload the 7z to the release, but that's notably more difficult than it would seem 
 discord/release: discord
