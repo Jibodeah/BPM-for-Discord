@@ -298,17 +298,18 @@ discord/integration.asar: $(DISCORD_INTEGRATION)
 	mkdir -p build/discord
 	asar pack discord/integration/ build/discord/integration.asar
 
+discord/betterDiscord-plugin.js: discord/bpm.js
+	mkdir -p build/better-discord
+	rm -f build/better-discord/betterDiscord-plugin.js
+	cat discord/better-discord/plugin-head.js >> build/better-discord/betterDiscord-plugin.js
+	cat build/discord/addon/bpm.js >> build/better-discord/betterDiscord-plugin.js
+	cat discord/better-discord/plugin-foot.js >> build/better-discord/betterDiscord-plugin.js
+
+discord: discord/betterDiscord-plugin.js discord/bpm.asar discord/integration.asar discord/installer
+
 clean/discord:
 	rm -rf build/discord
-
-discord/better-discord: discord/bpm.js
-	mkdir -p build/better-discord
-	rm -f build/better-discord/bpm.js
-	cat discord/better-discord/plugin-head.js >> build/better-discord/bpm.js
-	cat build/discord/addon/bpm.js >> build/better-discord/bpm.js
-	cat discord/better-discord/plugin-foot.js >> build/better-discord/bpm.js
-
-discord: discord/better-discord discord/bpm.asar discord/integration.asar discord/installer
+	rm -rf build/better-discord
 
 #Ideally we'd also upload the 7z to the release, but that's notably more difficult than it would seem 
 discord/release: discord

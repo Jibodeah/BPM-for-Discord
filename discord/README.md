@@ -15,10 +15,15 @@ Eventually once [the core repo PR](https://github.com/Rothera/bpm/pull/12) is me
 ## Build
 
 Building BPM for Discord requires:
+* Standard 'nix command-line tools (`make`, `mkdir`, `rm`, `cat`, `cd` specifically)
 * Getting the BPM build chain working (Python2, Python3, Mozilla tools, see the base README.md)
 * [Node.js](https://nodejs.org/en/download/) `v4.2.x`
 * [`webpack`](https://www.npmjs.com/package/webpack) -- this can be acquired via `npm install -g webpack`
 * [`asar`](https://www.npmjs.com/package/asar) -- this can be acquired via `npm install -g asar`
+
+Releasing BPM for Discord requires:
+* A `7z` installation on your `PATH`. 
+* `git`on your `PATH`.
 
 The following build hooks are available:
 * `make discord`
@@ -28,11 +33,12 @@ The following build hooks are available:
 
 1. Moves all files from `discord/installer` to `build/discord`
 2. Packs all files from `discord/integration` into `integration.asar` and moves it to `build/discord/integration.asar`
-3. Builds all BPM content and scripts
+3. Builds all BPM content and scripts into `build/addon`
 4. Moves required addon files from `build/addon` to `build/discord/addon/core` to support building `core.js`
-5. Builds all content scripts via Webpack and moves them to `build/discord/addon`
-5. Find/Replace-s the current version numbers into `build/discord/addon/settings.js` and `build/discord/addon/updates.js` 
+5. Builds `bpm.js` via Webpack and moves it to `build/discord/addon`
+5. Find/Replace-s the current version numbers into compiled `build/discord/addon/bpm.js` 
 6. Compiles `build/discord/addon` to `build/discord/bpm.asar`
+7. `cat`s together `build/better-discord/betterDiscord-plugin.js`
 9. Deletes `build/discord/addon`
 
 The final contents of `build/discord` should now look like this:
@@ -43,6 +49,10 @@ The final contents of `build/discord` should now look like this:
     
     /CONTENTS-OF-`discord/installer`
 
+The contents of `build/better-discord` should be:
+
+    /betterDiscord-plugin.js
+
 ### `make discord/release`
 
 1.  Ensures `make discord` has been run/is up to date
@@ -51,7 +61,9 @@ The final contents of `build/discord` should now look like this:
 4.  Pushes the new tag to github
 5.  Packs the contents of `build/discord` into `build/BPM for Discord DISCORD-VERSION.7z`
 
-Everything should now be in place to set up the release on Github.  Note that this only pushes the tag and does **not** upload the 7z file automatically to Github nor does it create the release draft.  This is intentional and should be done manually.
+Note this intentionally does *not* place `betterDiscord-plugin.js` into the 7z file.
+
+Everything should now be in place to set up the release on Github.  Note that this only pushes the tag and does **not** upload the 7z file and plugin script automatically to Github nor does it create the release draft.  This is intentional and should be done manually.
 
 ## Releases and Updates
 
@@ -70,6 +82,7 @@ If you wish to perform a release that does _not_ notify users (for example if on
 * <a href="https://github.com/ByzantineFailure/bpm/tree/discord/discord/installer">Installer</a>
 * <a href="https://github.com/ByzantineFailure/bpm/tree/discord/discord/integration">Integration</a>
 * <a href="https://github.com/ByzantineFailure/bpm/tree/discord/discord/addon">Addon</a>
+* <a href="https://github.com/ByzantineFailure/bpm/tree/discord/discord/better-discord">Better Discord Plugin</a>
 
 See each subfolder for what each submodule does.
 
