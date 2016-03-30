@@ -3,14 +3,17 @@
  * (c) 2015-2016 ByzantineFailure
  *
  * Installer entry point
+ *
+ * FLAGS:
+ * --ptb : Install to the PTB client
+ * -p : Feed in the path to discord (Linux only)
+ * POSITIONAL 1: Path to installer directory
  **/
 "use strict";
 var args = require('minimist')(process.argv.slice(2)),
     sourceRoot = args._[0],
-    //This will fail if you call this with a sourceRoot of 
-    //"isPTB".  If you are installing from a directory with
-    //a path of "isPTB" you will get what you deserve.
-    isPTB = args._.indexOf("isPTB") >= 0;
+    isPTB = args.ptb,
+    discordRoot = args.p;
 
 console.log(args);
 
@@ -20,7 +23,7 @@ if(!sourceRoot) {
     return;
 }
 
-var paths = require('./lib/paths').getPaths(sourceRoot, isPTB),
+var paths = require('./lib/paths').getPaths(sourceRoot, isPTB, discordRoot),
     integration = require('./lib/integration'),
     addon = require('./lib/addon');
 

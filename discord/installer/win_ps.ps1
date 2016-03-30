@@ -20,7 +20,7 @@ function Download-Node {
         $wc.DownloadFile($node_url, $node_output)
         Write-Host "Running installer..."
         if($isPTB) {
-            & $node_output $install_script $installer_directory isPTB
+            & $node_output $install_script $installer_directory --ptb
         } else {
             & $node_output $install_script $installer_directory
         }
@@ -39,7 +39,7 @@ if (Get-Command node.exe -errorAction SilentlyContinue) {
     if ($node_version -like "*v4.2*") {
         Write-Host "Version is v4.2.x, running installer..."
         if($isPTB) {
-            node.exe $install_script $installer_directory isPTB
+            node.exe $install_script $installer_directory --ptb
         } else {
             node.exe $install_script $installer_directory
         }

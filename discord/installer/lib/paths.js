@@ -14,21 +14,21 @@ module.exports = {
     getPaths: getPaths,
 };
 
-function getPaths(sourceRoot, isPTB) {
-    var discordPath = getDiscordPath(isPTB);
+function getPaths(sourceRoot, isPTB, discordRoot) {
+    var discordPath = getDiscordPath(isPTB, discordRoot);
     return {
         discordExtract: path.join(discordPath, 'bpm_extract'),
         discordPack: path.join(discordPath, 'app.asar'),
         discordBackup: path.join(discordPath, 'app.asar.clean'),
         integrationSource: path.join(sourceRoot, 'integration.asar'),
         addonSource: path.join(sourceRoot, 'bpm.asar'),
-        addonExtract: path.join(getAddonExtractPath(), 'bpm'),
-        addonCustom: path.join(getAddonExtractPath(), 'bpm', 'custom'),
-        addonCustomBackup: path.join(getAddonExtractPath(), '..', 'bpm_custom.bak')
+        addonExtract: path.join(getAddonExtractPath(discordRoot), 'bpm'),
+        addonCustom: path.join(getAddonExtractPath(discordRoot), 'bpm', 'custom'),
+        addonCustomBackup: path.join(getAddonExtractPath(discordRoot), '..', 'bpm_custom.bak')
     };
 }
 
-function getAddonExtractPath() {
+function getAddonExtractPath(discordRoot) {
     switch(OS) {
         case 'win32':
             return path.join(process.env.APPDATA, 'discord');
@@ -39,7 +39,7 @@ function getAddonExtractPath() {
     }
 }
 
-function getDiscordPath(isPTB) {
+function getDiscordPath(isPTB, discordRoot) {
     switch(OS) {
         case 'win32':
             var localDataFolder = isPTB ? 'DiscordPTB' : 'Discord',
