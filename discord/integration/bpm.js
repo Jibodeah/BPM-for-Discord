@@ -21,6 +21,8 @@ function getBpmDir() {
             return path.join(process.env.APPDATA, 'discord', 'bpm');
         case 'darwin':
             return path.join(process.env.HOME, 'Library', 'Preferences', 'discord', 'bpm');
+        case 'linux':
+            return path.join(process.cwd(), 'bpm');
         default:
             return path.join('var', 'local', 'bpm');
     }

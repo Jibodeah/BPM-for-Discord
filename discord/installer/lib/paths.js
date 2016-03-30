@@ -34,6 +34,8 @@ function getAddonExtractPath(discordRoot) {
             return path.join(process.env.APPDATA, 'discord');
         case 'darwin':
             return path.join(process.env.HOME, '/Library/Preferences/discord');
+        case 'linux':
+            return path.join(discordRoot);
         default:
             throw new Error('Unsupported OS ' + OS);
     }
@@ -65,6 +67,8 @@ function getDiscordPath(isPTB, discordRoot) {
             return path.join(discordFolder, folder, 'resources'); 
         case 'darwin':
             return '/Applications/Discord.app/Contents/Resources';
+        case 'linux':
+            return path.join(discordRoot, 'resources');
         default:
             throw new Error('Unsupported OS ' + OS);
     }

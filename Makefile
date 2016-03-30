@@ -271,7 +271,7 @@ DISCORD_INSTALLER_LIB := discord/installer/lib/addon.js discord/installer/lib/in
     discord/installer/lib/constants.js
 
 DISCORD_INSTALLER := discord/installer/index.js discord/installer/package.json \
-    discord/installer/install_mac.command discord/installer/install_windows.bat discord/installer/win_ps.ps1 \
+    discord/installer/install_mac.command discord/installer/install_linux.sh discord/installer/install_windows.bat discord/installer/win_ps.ps1 \
     discord/installer/install_windows_PTB.bat discord/installer/README.md
 
 #Phony target we can use to force things to build every run
