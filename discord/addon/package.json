@@ -12,6 +12,6 @@
     "style-loader": "^0.13.0"
   },
   "scripts": {
-    "test": "jshint settings/*.js"
+    "test": "jshint settings/*.js core/core.js updates/*.js search/*.js"
   }
 }

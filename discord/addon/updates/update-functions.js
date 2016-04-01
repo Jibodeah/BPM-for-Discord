@@ -10,7 +10,7 @@ module.exports = {
     checkForUpdates: checkForUpdates
 };
 
-var releasesUrl = 'https://api.github.com/repos/ByzantineFailure/BPM-for-Discord/releases'
+var releasesUrl = 'https://api.github.com/repos/ByzantineFailure/BPM-for-Discord/releases';
 var codeVersion = 'REPLACE-WITH-DC-VERSION';
 
 function checkForUpdates(createAlert) {
@@ -54,7 +54,7 @@ function checkForUpdates(createAlert) {
         } else if(createAlert) {
             alert('BPM up to date!');
         }
-    }
+    };
     xhr.send(null);
 }
 function addUpdatesNotifier(url) {

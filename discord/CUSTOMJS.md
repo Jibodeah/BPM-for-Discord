@@ -7,3 +7,4 @@ NOTE:  Your js files MUST be encoded as `utf-8`.  If you don't know what that is
 
 * Windows users add `.js` files here: `%APPDATA%/discord/bpm/custom`
 * Mac users add `.js` files here: `~/Library/Preferences/discord/bpm/custom`
+* Linux users add `.js` files under `PATH_TO_DISCORD_INSTALL/bpm/custom`

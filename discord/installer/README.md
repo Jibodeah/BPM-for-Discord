@@ -4,6 +4,8 @@
 
 *Mac installer*: `install_mac.command`
 
+*Linux installer*: `install_linux.sh`
+
 ## Install Script - `index.js`
 The install script takes one argument, which is the path the `bpm.asar` and `integration.asar` files are in.  If it is not provided it assumes `.` is where they will be found.  I didn't want this command at all, but it turns out when you double-click a `.command` file in OSX it runs with $PWD as `~`, not the location of the `.command` file.
 
@@ -45,4 +47,12 @@ The mac installer consists of one file:
 * `install_mac.command`
 
 `install_mac.command` checks if `node` exists.  If it does, it runs `node.js`, else it downloads the binary tarball, extracts the `node` binary, runs `index.js`, and then deletes the downloaded binary and tarball.
+
+## Linux-specific
+The linux installer consists of one file:
+* `install_linux.sh`
+
+It is important to note that this file **must be invoked from a terminal**.
+
+You will be prompted for the path to your Discord install.  The script _should_ check to make sure that it's a valid path.  It will then ask to grab a node binary if you don't have one, download it if it's okay (it will quit if not), and then execute `index.js
 

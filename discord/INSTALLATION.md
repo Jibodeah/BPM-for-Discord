@@ -11,6 +11,8 @@ _If any of these break, please create an issue on the issues page with your OS a
 
 **Mac**:  Double click `install_mac.command`.  If you do not have a node `v4.2.x` installation on your PATH, it will download a standalone tarball which will be removed when the install is complete.  Requires about 32MB free space which will be immediately regained after it's done installing and cleans up after itself (Node's expanded OSX tarball is shockingly large).
 
+**Linux**: Run `install_linux.sh` from the terminal.  You will be prompted for the location of the discord binary.  This installer may have a few kinks in it, but is fairly stable.  Much thanks to @IlikePizza555 for coding it up!
+
 **Manual**:  Run `index.js` with a Node.js `v4.2.x` binary.
 
 ## PTB Installation
@@ -22,6 +24,9 @@ _If any of these break, please create an issue on the issues page with your OS a
 case 'darwin':
   return '/Applications/Discord.app/Contents/Resources';
 ```
+
+**Linux**: The entire client is a PTB as it is, so this is not yet supported
+
 If you get it working let me know.
 
 ## Uninstall

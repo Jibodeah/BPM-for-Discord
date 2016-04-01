@@ -34,7 +34,6 @@ function BPM(mainWindow) {
 }
 
 BPM.prototype.init = function() {
-    //self.mainWindow.webContents.openDevTools();
     var scripts = getScripts();
     self.mainWindow.webContents.on('dom-ready', function() {
         scripts.forEach(function(script) {

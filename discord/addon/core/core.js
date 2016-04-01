@@ -20,7 +20,7 @@ cssMap['/extracss-webkit.css'] = require('raw!./extracss-webkit.css');
 
 function getChatInputTextarea() {
     var sendbox = utils.getElementsByClassName('channel-textarea-inner');
-    if(sendbox.length == 0) {
+    if(sendbox.length === 0) {
         return null;
     }
     return utils.htmlCollectionToArray(sendbox[0].getElementsByTagName('textarea'))[0];
@@ -55,5 +55,5 @@ window.addEventListener('bpm_backend_message', function(event) {
 require('./bpm-resources.js');
 require('./pref-setup.js');
 require('./background.js');
-require('./betterponymotes.js')
+require('./betterponymotes.js');
 
