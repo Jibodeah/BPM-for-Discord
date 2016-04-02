@@ -16,12 +16,13 @@ var fs = require('fs-extra'),
 function extractAddonCode(paths) {
     backupOldCustom(paths);
     console.log('Removing previous bpm, if it exists...');
-    if(fs.existsSync(paths.addonExtract)) {
-        fs.removeSync(paths.addonExtract);
+    if(fs.existsSync(paths.addonDirectory)) {
+        fs.removeSync(paths.addonDirectory);
         console.log('Removed previous bpm!');
     }
+    fs.ensureDirSync(paths.addonDirectory);
     console.log('Extracting bpm data to discord data...');
-    asar.extractAll(paths.addonSource, paths.addonExtract); 
+    fs.copySync(paths.addonSource, paths.addonTarget);
     console.log('Done extracting bpm data');
     restoreOldCustom(paths);
 }

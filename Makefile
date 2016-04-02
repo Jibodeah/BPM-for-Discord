@@ -254,11 +254,11 @@ discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
 	cp build/gif-animotes.css discord/addon/core/
 	
 	cd discord/addon && npm install
-	cd discord/addon && webpack bpm.js ../../build/discord/addon/bpm.js
+	cd discord/addon && webpack bpm.js ../../build/discord/bpm.js
 	
-	sed -i "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/addon/bpm.js
-	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/addon/bpm.js
-	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/addon/bpm.js
+	sed -i "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/bpm.js
+	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/bpm.js
+	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/bpm.js
 
 discord/bpm.asar: discord/bpm.js
 	mkdir -p build/discord
@@ -302,10 +302,10 @@ discord/betterDiscord-plugin.js: discord/bpm.js
 	mkdir -p build/better-discord
 	rm -f build/better-discord/betterDiscord-plugin.js
 	cat discord/better-discord/plugin-head.js >> build/better-discord/betterDiscord-plugin.js
-	cat build/discord/addon/bpm.js >> build/better-discord/betterDiscord-plugin.js
+	cat build/discord/bpm.js >> build/better-discord/betterDiscord-plugin.js
 	cat discord/better-discord/plugin-foot.js >> build/better-discord/betterDiscord-plugin.js
 
-discord: discord/betterDiscord-plugin.js discord/bpm.asar discord/integration.asar discord/installer
+discord: discord/bpm.js discord/betterDiscord-plugin.js discord/integration.asar discord/installer
 
 clean/discord:
 	rm -rf build/discord
