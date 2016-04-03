@@ -14,6 +14,6 @@ If you installed BetterDiscord and BPM, you should just reinstall Discord.  If y
 
 Install BetterDiscord
 
-Move the `betterDiscord-plugin.js` file into BetterDiscord's plugin directory.  On Windows, this is `%APPDATA%/BetterDiscord/plugins`.  I do not know the directory on OSX (and would love to update this if any OSX user knows it!).
+Move the `betterDiscord-plugin.js` file into BetterDiscord's plugin directory.  On Windows, this is `%APPDATA%/BetterDiscord/plugins`.  On OSX this is `~/Library/Preferences/BetterDiscord/plugins` (I think)
 
 Restart Discord after doing this and you should be in business.
