@@ -1,5 +1,8 @@
+Download `BPM.for.Discord.discord-VERSION.7z`
+
+Use a 7zip unarchiver to unpack.  [7zip](http://www.7-zip.org/download.html) is the best installation for Windows.  I can't reliably refer you one for Mac.  Linux you are also on your own but _should_ be able to get a good one from your distribution's package manager.
+
 ## Non-PTB Installation
-Use a 7zip unarchiver to unpack.  [7zip](http://www.7-zip.org/download.html) is the best installation for windows, can't reliably point to one for Mac.
 
 **IF YOU DO NOT UNPACK THE ARCHIVE AND TRY TO RUN THE SCRIPT FROM WITHIN IT THE INSTALL _WILL_ FAIL.**
 
