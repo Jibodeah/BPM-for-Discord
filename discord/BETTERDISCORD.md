@@ -10,6 +10,8 @@ The Custom JS feature does not work with the BetterDiscord plugin version.  You 
 
 ## Installation
 
+Download `betterDiscord-plugin.js`.
+
 If you installed BetterDiscord and BPM, you should just reinstall Discord.  If you have previously installed BPM, you will have to either re-install discord, or restore `app.asar` from `app.asar.clean`.  
 
 Install BetterDiscord
