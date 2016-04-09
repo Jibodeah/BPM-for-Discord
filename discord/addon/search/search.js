@@ -15,24 +15,10 @@ function modifyHelpContainer(container) {
 
 //We rely on BPM's core code to attach this listener
 function createSearchButton(container) {
-    var buttonParent = document.createElement('div');
-    buttonParent.className = 'help-container';
-
-
     var searchButton = document.createElement('div');
     searchButton.className = 'bpm-emote-search-button';
-    buttonParent.appendChild(searchButton);
-    /*
-    var blankSpan = document.createElement('span');
-    blankSpan.className = 'btn-help';
-    searchButton.appendChild(blankSpan);
-    var helpText = document.createElement('span');
-    helpText.className = 'help-text';
-    helpText.appendChild(document.createTextNode('Emote Search'));
-    searchButton.appendChild(helpText);
-    */
      
-    container.appendChild(buttonParent);
+    container.appendChild(searchButton);
 }
 
 BPM_utils.waitForElementByClass('guilds-wrapper', modifyHelpContainer);
