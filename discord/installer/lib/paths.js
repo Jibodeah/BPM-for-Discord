@@ -36,7 +36,7 @@ function getAddonExtractPath(discordRoot) {
         case 'darwin':
             return path.join(process.env.HOME, '/Library/Preferences/discord');
         case 'linux':
-            return path.join(discordRoot);
+            return discordRoot;
         default:
             throw new Error('Unsupported OS ' + OS);
     }

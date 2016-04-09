@@ -19,8 +19,14 @@ console.log(args);
 
 if(!sourceRoot) {
     console.log('No content directory provided!');
-    console.log('Installer should be called as "index.js ADDON_ROOT [--isPTB]"');
+    console.log('Installer should be called as "index.js ADDON_ROOT [--isPTB] [-p PATH_TO_DISCORD]"');
     return;
+}
+
+if ((!discordRoot || discordRoot === true) && process.platform === 'linux') {
+    throw new Error('You must specify [-p PATH_TO_DISCORD] on linux!');
+} else if (discordRoot && process.platform !== 'linux') {
+    throw new Error('You may not specify -p on a non-linux platform!');
 }
 
 var paths = require('./lib/paths').getPaths(sourceRoot, isPTB, discordRoot),
