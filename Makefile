@@ -298,14 +298,14 @@ discord/integration.asar: $(DISCORD_INTEGRATION)
 	mkdir -p build/discord
 	asar pack discord/integration/ build/discord/integration.asar
 
-discord/betterDiscord-plugin.js: discord/bpm.js
+discord/betterDiscord-bpm.plugin.js: discord/bpm.js
 	mkdir -p build/better-discord
-	rm -f build/better-discord/betterDiscord-plugin.js
-	cat discord/better-discord/plugin-head.js >> build/better-discord/betterDiscord-plugin.js
-	cat build/discord/bpm.js >> build/better-discord/betterDiscord-plugin.js
-	cat discord/better-discord/plugin-foot.js >> build/better-discord/betterDiscord-plugin.js
+	rm -f build/better-discord/betterDiscord-bpm.plugin.js
+	cat discord/better-discord/plugin-head.js >> build/better-discord/betterDiscord-bpm.plugin.js
+	cat build/discord/bpm.js >> build/better-discord/betterDiscord-bpm.plugin.js
+	cat discord/better-discord/plugin-foot.js >> build/better-discord/betterDiscord-bpm.plugin.js
 
-discord: discord/bpm.js discord/betterDiscord-plugin.js discord/integration.asar discord/installer
+discord: discord/bpm.js discord/betterDiscord-bpm.plugin.js discord/integration.asar discord/installer
 
 clean/discord:
 	rm -rf build/discord
