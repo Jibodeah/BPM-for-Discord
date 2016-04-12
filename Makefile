@@ -256,9 +256,10 @@ discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
 	cd discord/addon && npm install
 	cd discord/addon && webpack bpm.js ../../build/discord/bpm.js
 	
-	sed -i "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/bpm.js
-	sed -i "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/bpm.js
-	sed -i "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/bpm.js
+	sed -i.bak "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/bpm.js
+	sed -i.bak "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/bpm.js
+	sed -i.bak "s/REPLACE-WITH-DC-VERSION/$(DISCORD_VERSION)/g" build/discord/bpm.js
+	rm build/discord/bpm.js.bak
 
 discord/bpm.asar: discord/bpm.js
 	mkdir -p build/discord
