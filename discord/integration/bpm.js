@@ -59,12 +59,6 @@ function readCustomFile(filename) {
 function getScripts() {
     return [
         readAddonFile('bpm.js')
-    /*
-        readAddonFile('updates.js'),
-        readAddonFile('settings.js'),
-        readAddonFile('search.js'),
-        readAddonFile('core.js')
-    */
     ]
     .concat(getCustomScripts());
 }
