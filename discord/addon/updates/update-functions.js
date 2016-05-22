@@ -66,10 +66,11 @@ function addUpdatesNotifier(url) {
         return;
     }
 
-    var li = document.createElement('li');
+    var guildDiv = document.createElement('div');
+    guildDiv.className = 'guild';
     
     var ginner = document.createElement('div');
-    li.appendChild(ginner);
+    guildDiv.appendChild(ginner);
     ginner.className = 'guild-inner';
     ginner.id = 'bpm-new-version-button';
 
@@ -80,7 +81,7 @@ function addUpdatesNotifier(url) {
     link.target = '_blank';
     link.appendChild(document.createTextNode('Update'));
     
-    var container = document.querySelector('ul.guilds');
-    container.insertBefore(li, container.firstChild);
+    var container = document.querySelector('div.guilds');
+    container.insertBefore(guildDiv, container.firstChild);
 }
 
