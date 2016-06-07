@@ -57,7 +57,7 @@ function retrievePrefs(callback) {
         }
     }
     window.addEventListener('bpm_message', prefsListener, false);
-    var getPrefs =new CustomEvent('bpm_message');
+    var getPrefs = new CustomEvent('bpm_message');
     getPrefs.data = { method: 'get_prefs' };
     window.dispatchEvent(getPrefs);
 }

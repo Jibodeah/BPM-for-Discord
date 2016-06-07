@@ -67,7 +67,7 @@ function getDiscordPath(isPTB, discordRoot) {
                 .name;
             return path.join(discordFolder, folder, 'resources'); 
         case 'darwin':
-            return '/Applications/Discord.app/Contents/Resources';
+            return '/Applications/Discord' + (isPTB ? ' PTB' : '') + '.app/Contents/Resources';
         case 'linux':
             return path.join(discordRoot, 'resources');
         default:

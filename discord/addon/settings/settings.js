@@ -2,7 +2,24 @@
  * BPM for Discord
  * (c) 2015-2016 ByzantineFailure 
  * 
- * Settings panel
+ * Settings panel.  Sets up the tab in Discord settings, as well as 
+ * handling switching between subpanels.  Manages teardown.
+ *
+ * Subpanels are inserted into `subpanelMap` and are objects of the form:
+ * {
+ *   init: FUNCTION(subpanel_node),
+ *   teardown: FUNCTION(subpanel_node),
+ *   html: RAW_HTML_STRING
+ * }
+ *
+ * The subpanel's key in the map should be the value of `data-bpmSubpanelMessage`
+ * for its tab in `base-panel.html`
+ *
+ * When the subpanel is selected, `html` is set as the subpanel div's innerHTML
+ * and `init` is called with the subpanel div's node passed to it.
+ *
+ * When the settings panel is closed or another subpanel is selected, `teardown`
+ * is called with the subpanel div's node passed to it.
  **/
 
 require('!style!css!./settings.css');
