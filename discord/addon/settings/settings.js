@@ -43,7 +43,7 @@ var subpanelMap = {
     insert_about: about
 };
 
-function injectBpmSettingsPanel(settingsButton) {
+var settingsObserver = new MutationObserver(function(mutations) {
     function addTabElement(tabBar) {
         var tabElement = document.createElement('div');
         tabElement.className = 'tab-bar-item';
@@ -63,11 +63,14 @@ function injectBpmSettingsPanel(settingsButton) {
         });
     }
 
-    settingsButton.addEventListener('click', function() {
+    mutations.forEach(function(mutation) {
+        if(mutation.type != 'childList' || mutation.addedNodes.length === 0) return;
+        var addedNode = mutation.addedNodes[0];
+        if(!addedNode.querySelector('div .user-settings-modal')) return;
         BPM_utils.waitForElementByClass('tab-bar SIDE', addTabAndListeners);
         BPM_utils.waitForElementByClass('settings-inner', injectSettingsPage);
     });
-}
+});
 
 function injectSettingsPage(injectInto) {
     if(document.getElementById('bpm-settings-panel')) return;
@@ -192,5 +195,53 @@ function showSettings(display) {
     }
 }
 
+/*
+ Old Implementation -- I'm keeping this around because I'd like to be able to
+ quickly revert to it in the event the new MutationObserver version is subtly broken.
+
+function injectBpmSettingsPanel(settingsButton) {
+    function addTabElement(tabBar) {
+        var tabElement = document.createElement('div');
+        tabElement.className = 'tab-bar-item';
+        tabElement.innerHTML = 'BPM';
+        tabElement.id = 'bpm-settings-tab-item';
+        tabBar.appendChild(tabElement);
+    }
+
+    function addTabAndListeners(tabBar) {
+        addTabElement(tabBar);
+        var items = document.getElementsByClassName('tab-bar-item');
+        Array.prototype.forEach.call(items, function(item) {
+            item.addEventListener('click', function() { 
+                focusTabElement(item); 
+                showSettings(item.id == 'bpm-settings-tab-item');
+            }, false);
+        });
+    }
+
+    settingsButton.addEventListener('click', function() {
+        BPM_utils.waitForElementByClass('tab-bar SIDE', addTabAndListeners);
+        BPM_utils.waitForElementByClass('settings-inner', injectSettingsPage);
+    });
+}
+
+
 BPM_utils.waitForElementByClass('btn btn-settings', injectBpmSettingsPanel);
+*/
+
+//Not exactly the greatest way to do this, need to figure out some non-timeout based
+//way to ensure we have the modal spans
+BPM_utils.waitForElementByClass('tooltips', function(tooltips) {
+    window.setTimeout(function(){
+        var modalSpans = document.querySelectorAll('div[data-reactroot] > span');
+        var observerConfig = {
+            childList: true,
+            attributes: false,
+            characterData: false
+        };
+        Array.prototype.forEach.call(modalSpans, function(span) {
+            settingsObserver.observe(span, observerConfig);
+        });
+    }, 100);
+});
 
