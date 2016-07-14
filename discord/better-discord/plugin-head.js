@@ -2,6 +2,6 @@
 
 function bpm() {}
 
-bpm.prototype.load = function() {
+bpm.prototype.start = function() {
 /* cat in bpm.js from addon */
 
