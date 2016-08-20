@@ -74,11 +74,28 @@ function addPackageDependency(paths) {
 //the API comes out anyway)
 function injectBpm(paths) {
     console.log('Injecting BPM code into index.js...');
-    var indexPath = path.join(paths.discordExtract, 'app', 'index.js');
-    var indexFile = fs.readFileSync(indexPath, 'utf8');
+    
+    var indexPath = getIndexPath(paths),
+        indexFile = fs.readFileSync(indexPath, 'utf8');
+
     indexFile = indexFile.replace('\'use strict\';', '\'use strict\';\n\n' + constants.requireStatement + '\n\n');
     indexFile = indexFile.replace(constants.injectLookFor, constants.injectLookFor + '\n' + constants.injectStatement + '\n');
     fs.writeFileSync(indexPath, indexFile, 'utf8');
     console.log('BPM Injected!');
+}
+
+//TODO: Discord is changing their internal structure, so this is a temp fix to hold
+//us over until the mainline gets this change from the PTB
+function getIndexPath(paths) {
+    var indexPath = path.join(paths.discordExtract, 'app', 'index.js');
+    try {
+        fs.statSync(indexPath);
+        return indexPath
+    } catch(e) {
+        if(e.code === 'ENOENT') {
+            return path.join(paths.discordExtract, 'index.js');
+        }
+        throw e;
+    }
 }
 
