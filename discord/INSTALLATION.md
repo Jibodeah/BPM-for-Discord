@@ -16,7 +16,7 @@ _If any of these break, please create an issue on the issues page with your OS a
 
 **Linux**: Run `install_linux.sh` from the terminal.  You will be prompted for the location of the discord binary.  This installer may have a few kinks in it, but is fairly stable.  Much thanks to [@ILikePizza555](https://github.com/ILikePizza555) for coding it up!
 
-**Manual**:  Run `index.js` with a Node.js `v4.2.x` binary.
+**Manual**:  Run `index.js .` from within the extracted archive with a Node.js `v4.2.x` binary.  This method is useful for automated installation.
 
 ## PTB Installation
 
