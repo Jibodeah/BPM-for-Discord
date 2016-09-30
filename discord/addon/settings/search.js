@@ -29,6 +29,18 @@ function initSearchSubpanel(subpanel) {
             prefs.searchLimit = newValue;
             BPM_utils.setOption('searchLimit', newValue);
         });
+        var inputs = BPM_utils.htmlCollectionToArray(subpanel.getElementsByTagName('input'));
+        var checkboxes = inputs.filter(function(input) { return input.type == 'checkbox'; });
+        checkboxes.forEach(function(checkbox) {
+            checkbox.nextElementSibling.addEventListener('click', function() {
+                var option = checkbox.getAttribute('data-bpmoption');
+                BPM_utils.setOption(option, !checkbox.checked);
+                checkbox.checked = !checkbox.checked;
+            });
+        });
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = prefs[checkbox.getAttribute('data-bpmoption')];  
+        });
     }
     BPM_utils.retrievePrefs(initSearchPrefs);
 }
@@ -36,5 +48,10 @@ function initSearchSubpanel(subpanel) {
 function teardownSearchSubpanel(subpanel) {
     var limitInput = document.getElementById('bpm-option-search-limit');
     limitInput.removeEventListener('blur'); 
+    var inputs = BPM_utils.htmlCollectionToArray(subpanel.getElementsByTagName('input'));
+    var checkboxes = inputs.filter(function(input) { return input.type == 'checkbox'; });
+    checkboxes.forEach(function(checkbox) {
+        checkbox.nextElementSibling.removeEventListener('click');
+    });
 }
 
