@@ -55,15 +55,27 @@ The contents of `build/better-discord` should be:
 
 ### `make discord/release`
 
+Requires an environment variable, `$DISCORD_RELEASE_GITHUB_API_TOKEN`.  This token should have `repo` permissions.
+
 1.  Ensures `make discord` has been run/is up to date
-2.  Executes `git status` and `git log -1` and prompts the user if they're sure this is what they want to release
-3.  If the user is sure, tags the current branch's `HEAD` with `DISCORD-VERSION` from the Makefile (if the tag already exists this process fails)
-4.  Pushes the new tag to github
-5.  Packs the contents of `build/discord` into `build/BPM for Discord DISCORD-VERSION.7z`
+2.  Adds, commits, and pushes `discord/RELEASE_NOTES.md`.
+3.  Executes `git status` and `git log -1` and prompts the user if they're sure this is what they want to release
+4.  If the user is sure, tags the current branch's `HEAD` with `DISCORD-VERSION` from the Makefile (if the tag already exists this process fails)
+5.  Pushes the new tag to github
+6.  Packs the contents of `build/discord` into `build/BPM for Discord DISCORD-VERSION.7z`
+7.  Creates a release associated with the tag `DISCORD_VERSION`, and a base branch of `DISCORD_RELEASE_BASE_BRANCH`.  The body is identical to `discord/RELEASE_NOTES.md`
 
 Note this intentionally does *not* place `betterDiscord-plugin.js` into the 7z file.
 
-Everything should now be in place to set up the release on Github.  Note that this only pushes the tag and does **not** upload the 7z file and plugin script automatically to Github nor does it create the release draft.  This is intentional and should be done manually.
+You will need to manually upload the release files after testing and mark the release as not a draft/pre-release.
+
+### `make discord/upload-release-asstes`
+
+Not yet functional.  Do not use.  Intended to upload assets for the release after they've been tested.
+
+### `make discord/clean-tag`
+
+Deletes the tag `DISCORD_VERSION` locally and on the remote.  Intended for use while testing new release automation code.
 
 ## Releases and Updates
 

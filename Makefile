@@ -43,6 +43,10 @@ VERSION = 66.265
 # - Notify interested parties
 
 DISCORD_VERSION = discord-v0.8.14-beta
+DISCORD_RELEASE_BASE_BRANCH = discord
+GITHUB_API_HOST = https://api.github.com
+GITHUB_USER = ByzantineFailure
+GITHUB_REPO_NAME = BPM-for-Discord
 
 CONTENT_SCRIPT := \
     addon/bpm-header.js addon/bpm-utils.js addon/bpm-browser.js \
@@ -312,8 +316,19 @@ clean/discord:
 	rm -rf build/discord
 	rm -rf build/better-discord
 
+discord/generate-notes:
+	# Create release notes
+	echo 'Creating release notes...'
+	sed 's/%TAG-NAME%/$(DISCORD_VERSION)/g' discord/RELEASE_NOTES_TEMPLATE.md > discord/RELEASE_NOTES.md
+
 #Ideally we'd also upload the 7z to the release, but that's notably more difficult than it would seem 
 discord/release: discord
+	#Commit release notes
+	cat discord/RELEASE_NOTES.md | python -c 'import sys,json;print(json.dumps(sys.stdin.read()))' > build/DISCORD_RELEASE_NOTES.md
+	git add discord/RELEASE_NOTES.md	
+	git commit -m "Adding release notes for $(DISCORD_VERSION)"
+	git push
+	
 	#Make sure we know what we're releasing
 	git status 
 	git log -1 
@@ -330,6 +345,20 @@ discord/release: discord
 	rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z
 	7z a ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z -r ./build/discord
 	
+	#Create release
+	NOTES_TEXT=$$(cat build/DISCORD_RELEASE_NOTES.md);\
+	UPLOAD_URL=$$(curl -X POST -H "Authorization: token $(DISCORD_RELEASE_GITHUB_API_TOKEN)" --data \
+		"{\
+			\"tag_name\":\"$(DISCORD_VERSION)\",\
+			\"target_commitish\":\"$(DISCORD_RELEASE_BASE_BRANCH)\",\
+			\"name\":\"$(DISCORD_VERSION)\",\
+			\"body\": $$NOTES_TEXT,\
+			\"draft\":false,\
+			\"prerelease\":true\
+		}"\
+		"$(GITHUB_API_HOST)/repos/$(GITHUB_USER)/$(GITHUB_REPO_NAME)/releases" \
+		| jq '.upload_url' | sed 's/"//g' | sed 's/name,label}//g' | sed 's/{//g' ); \
+	
 	#I'm leaving the password-protected code here just in case
 	#Mac doesn't have a good 7z client that handles password protected so we create a zip.
 	#rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION)\ MAC.zip
@@ -339,4 +368,20 @@ discord/release: discord
 	#that node's module tree creates.  So, we use 7z for Windows.  In other news, what the fuck, MS.
 	#rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION)\ WINDOWS.7z
 	#7z a ./build/BPM\ for\ Discord\ $(DISCORD_VERSION)\ WINDOWS.7z -r ./build/discord/* -p$(DC_BPM_ARCHIVE_PASSWORD) -mhe 
+	
+
+# This does not yet function.  I think github actually refuses to allow you to upload files to a pre-release?
+discord/upload-release-assets:
+	Z_NAME_PARAM="name=BPM%20for%20Discord%20$(DISCORD_VERSION).7z";\
+	JS_NAME_PARAM="name=betterDiscord-bpm.plugin.js";\
+    echo $$UPLOAD_URL; \
+	curl -X POST -H "Authoriztion: token $(DISCORD_RELEASE_GITHUB_API_TOKEN)" -H "Content-Type: application/x-7z-compressed" \
+		--data-binary @./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z $$UPLOAD_URL$$Z_NAME_PARAM;\
+	curl -X POST -H "Authoriztion: token $(DISCORD_RELEASE_GITHUB_API_TOKEN)" -H "Content-Type: application/javascript" \
+		--data-binary @./build/better-discord/betterDiscord-bpm.plugin.js "$$UPLOAD_URL$$JS_NAME_PARAM";
+
+# For testing
+discord/clean-tag:
+	git tag -d $(DISCORD_VERSION)
+	git push origin :refs/tags/$(DISCORD_VERSION)
 
