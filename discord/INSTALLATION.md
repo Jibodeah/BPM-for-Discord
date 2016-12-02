@@ -22,11 +22,7 @@ _If any of these break, please create an issue on the issues page with your OS a
 
 **Windows**:  Double click `install_windows_PTB.bat`  
 
-**Mac**:  Not yet supported (Coming soon!).  If you feel really creative you can try and modify these lines in 'index.js`  to point to the right path:
-```javascript
-case 'darwin':
-  return '/Applications/Discord.app/Contents/Resources';
-```
+**Mac**:  Same as non-ptb, but double-click `install_mac_PTB.command`
 
 **Linux**: The entire client is a PTB as it is, so this is not yet supported
 
