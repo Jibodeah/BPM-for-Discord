@@ -35,6 +35,10 @@ downloadNodeAndInstall() {
     rm -f $DIR/node.tar.gz;
 }
 
+# Confirm `curl` exists
+# Redirect stderr for command -v to stdout, redirect the error message to stderr.
+command -v curl >/dev/null 2>&1 || { echo 'curl is required to install BPM for Discord.  Please place its binary on your PATH and try again.' >&2; exit 1; }
+
 if [ -z $(which node) ]; then
     echo "Cannot find node";
     downloadNodeAndInstall;
