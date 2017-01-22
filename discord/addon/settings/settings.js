@@ -64,9 +64,13 @@ var settingsObserver = new MutationObserver(function(mutations) {
     }
 
     mutations.forEach(function(mutation) {
-        if(mutation.type != 'childList' || mutation.addedNodes.length === 0) return;
+        if(mutation.type != 'childList' || mutation.addedNodes.length === 0) {
+            return;
+        }
         var addedNode = mutation.addedNodes[0];
-        if(!addedNode.querySelector('div .user-settings-modal')) return;
+        if(!addedNode.querySelector || !addedNode.querySelector('.user-settings-modal')) {
+            return;
+        }
         BPM_utils.waitForElementByClass('tab-bar SIDE', addTabAndListeners);
         BPM_utils.waitForElementByClass('settings-inner', injectSettingsPage);
     });
@@ -230,18 +234,20 @@ BPM_utils.waitForElementByClass('btn btn-settings', injectBpmSettingsPanel);
 */
 
 //Not exactly the greatest way to do this, need to figure out some non-timeout based
-//way to ensure we have the modal spans
-BPM_utils.waitForElementByClass('tooltips', function(tooltips) {
+//way to ensure we have the modal spans.
+//I don't like the shotgun approach here (all subtree changes to the approot) but 
+//after BD broke I can't find a better way
+BPM_utils.waitForElementById('app-mount', function(mount) {
     window.setTimeout(function(){
-        var modalSpans = document.querySelectorAll('div[data-reactroot] > span');
         var observerConfig = {
-            childList: true,
-            attributes: false,
-            characterData: false
-        };
-        Array.prototype.forEach.call(modalSpans, function(span) {
-            settingsObserver.observe(span, observerConfig);
-        });
+                childList: true,
+                subtree: true,
+                attributes: false,
+                characterData: false
+            }, 
+            reactRoot = document.querySelector('div[data-reactroot]');
+        
+        settingsObserver.observe(reactRoot, observerConfig);
     }, 100);
 });
 
