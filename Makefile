@@ -309,6 +309,7 @@ discord/betterDiscord-bpm.plugin.js: discord/bpm.js
 	cat discord/better-discord/plugin-head.js >> build/better-discord/betterDiscord-bpm.plugin.js
 	cat build/discord/bpm.js >> build/better-discord/betterDiscord-bpm.plugin.js
 	cat discord/better-discord/plugin-foot.js >> build/better-discord/betterDiscord-bpm.plugin.js
+	sed -i.bak 's/IS_BETTER_DISCORD = false/IS_BETTER_DISCORD = true/g' build/better-discord/betterDiscord-bpm.plugin.js
 
 discord: discord/bpm.js discord/betterDiscord-bpm.plugin.js discord/integration.asar discord/installer
 

@@ -26,7 +26,9 @@
 var manage_prefs = require('./pref-setup').manage_prefs,
     resources = require('./bpm-resources'),
     sr_name2id = resources.sr_name2id,
-    BD_PLUGIN_NAME = 'BPM_FOR_BETTERDISCORD';
+    BD_PLUGIN_NAME = 'BPM_FOR_BETTERDISCORD',
+    // This value is overwritten in the build process for the BD plugin
+    IS_BETTER_DISCORD = false;
 
 function bdReadValue(key) {
     return bdPluginStorage.get(BD_PLUGIN_NAME, key);
