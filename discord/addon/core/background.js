@@ -25,18 +25,35 @@
 
 var manage_prefs = require('./pref-setup').manage_prefs,
     resources = require('./bpm-resources'),
-    sr_name2id = resources.sr_name2id;
+    sr_name2id = resources.sr_name2id,
+    BD_PLUGIN_NAME = 'BPM_FOR_BETTERDISCORD';
+
+function bdReadValue(key) {
+    return bdPluginStorage.get(BD_PLUGIN_NAME, key);
+}
+function bdWriteValue(key, data) {
+    bdPluginStorage.set(BD_PLUGIN_NAME, key, data);
+}
+function bdReadJson(key) {
+    var value = bdReadValue(key);
+    return value === undefined ? undefined : JSON.parse(value);
+}
+function bdWriteJson(key, data) {
+    bdWriteValue(key, JSON.stringify(data));
+}
 
 (function() {
-if(localStorage.prefs === undefined) {
+if(!IS_BETTER_DISCORD && localStorage.prefs === undefined) {
     localStorage.prefs = "{}";
+} else if (IS_BETTER_DISCORD && bdReadValue('prefs') === null) {
+    bdWriteValue('prefs', '{}');
 }
 
 var pref_manager = manage_prefs(sr_name2id, {
-    read_value: function(key) { return localStorage[key]; },
-    write_value: function(key, data) { localStorage[key] = data; },
-    read_json: function(key) { return localStorage[key] === undefined ? undefined : JSON.parse(localStorage[key]); },
-    write_json: function(key, data) { localStorage[key] = JSON.stringify(data); },
+    read_value: IS_BETTER_DISCORD ? bdReadValue : function(key) { return localStorage[key]; },
+    write_value: IS_BETTER_DISCORD ? bdWriteValue : function(key, data) { localStorage[key] = data; },
+    read_json: IS_BETTER_DISCORD ? bdReadJson : function(key) { return localStorage[key] === undefined ? undefined : JSON.parse(localStorage[key]); },
+    write_json: IS_BETTER_DISCORD ? bdWriteJson : function(key, data) { localStorage[key] = JSON.stringify(data); },
 
     download_file: function(done, url, callback) {
         var request = new XMLHttpRequest();
