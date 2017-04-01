@@ -8,7 +8,7 @@
 module.exports = {
     init: initGeneral,
     teardown: teardownGeneral,
-    html: require('raw!./html/general.html')
+    html: require('raw-loader!./html/general.html')
 };
 
 var BPM_utils = require('../utils.js');

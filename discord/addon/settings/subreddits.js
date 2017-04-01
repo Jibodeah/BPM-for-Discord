@@ -9,7 +9,7 @@
 module.exports = {
     init: BPM_initSubreddits,
     teardown: BPM_teardownSubreddits,
-    html: require('raw!./html/subreddits.html')
+    html: require('raw-loader!./html/subreddits.html')
 };
 
 var BPM_utils = require('../utils.js');

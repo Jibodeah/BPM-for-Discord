@@ -8,7 +8,7 @@
 module.exports = {
     init: initSearchSubpanel,
     teardown: teardownSearchSubpanel,
-    html: require('raw!./html/search.html')
+    html: require('raw-loader!./html/search.html')
 };
 
 var BPM_utils = require('../utils.js');

@@ -386,3 +386,7 @@ discord/clean-tag:
 	git tag -d $(DISCORD_VERSION)
 	git push origin :refs/tags/$(DISCORD_VERSION)
 
+discord/7z: discord
+	rm -rf ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z
+	7z a ./build/BPM\ for\ Discord\ $(DISCORD_VERSION).7z -r ./build/discord
+

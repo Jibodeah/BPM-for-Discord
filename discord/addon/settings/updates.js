@@ -10,7 +10,7 @@
 module.exports = {
     init: initUpdates,
     teardown: teardownUpdates,
-    html: require('raw!./html/updates.html')
+    html: require('raw-loader!./html/updates.html')
 };
 
 var BPM_updates = require('../updates/update-functions.js');

@@ -8,7 +8,7 @@
  * we just create the button and maintain a reference
  * to the node.
  **/
-require('!style!css!./search.css');
+require('!style-loader!css-loader!./search.css');
 
 var BPM_utils = require('../utils.js'),
     searchButton;

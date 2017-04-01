@@ -10,13 +10,13 @@
 var utils = require('../utils');
 
 var cssMap = {};
-cssMap['/emote-classes.css'] = require('raw!./emote-classes.css');
-cssMap['/gif-animotes.css'] = require('raw!./gif-animotes.css');
-cssMap['/bootstrap.css'] = require('raw!./bootstrap.css');
-cssMap['/bpmotes.css'] = require('raw!./bpmotes.css');
-cssMap['/combiners-nsfw.css'] = require('raw!./combiners-nsfw.css');
-cssMap['/extracss-pure.css'] = require('raw!./extracss-pure.css');
-cssMap['/extracss-webkit.css'] = require('raw!./extracss-webkit.css');
+cssMap['/emote-classes.css'] = require('raw-loader!./emote-classes.css');
+cssMap['/gif-animotes.css'] = require('raw-loader!./gif-animotes.css');
+cssMap['/bootstrap.css'] = require('raw-loader!./bootstrap.css');
+cssMap['/bpmotes.css'] = require('raw-loader!./bpmotes.css');
+cssMap['/combiners-nsfw.css'] = require('raw-loader!./combiners-nsfw.css');
+cssMap['/extracss-pure.css'] = require('raw-loader!./extracss-pure.css');
+cssMap['/extracss-webkit.css'] = require('raw-loader!./extracss-webkit.css');
 
 function getChatInputTextarea() {
     var sendbox = utils.getElementsByClassName('channel-textarea-inner');

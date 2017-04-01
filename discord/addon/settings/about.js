@@ -8,5 +8,5 @@
 module.exports = {
     init: function() { /* Noop */ },
     teardown: function() { /* Noop */ },
-    html: require('raw!./html/about.html')
+    html: require('raw-loader!./html/about.html')
 };

@@ -4,7 +4,7 @@
  *
  * Checks for updates on launch then every UPDATE_INTERVAL_HOURS
  **/
-require('!style!css!./updates.css');
+require('!style-loader!css-loader!./updates.css');
 var BPM_updates = require('./update-functions.js');
 
 (function() {

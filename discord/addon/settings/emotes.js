@@ -13,7 +13,7 @@
 module.exports = {
     init: BPM_initEmoteSettings,
     teardown: BPM_cleanEmoteSettings,
-    html: require('raw!./html/emotes.html')
+    html: require('raw-loader!./html/emotes.html')
 };
 
 var BPM_utils = require('../utils.js');

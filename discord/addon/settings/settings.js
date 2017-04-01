@@ -22,10 +22,10 @@
  * is called with the subpanel div's node passed to it.
  **/
 
-require('!style!css!./settings.css');
+require('!style-loader!css-loader!./settings.css');
 
 var BPM_utils = require('../utils.js'),
-    basePanelHtml = require('raw!./html/base-panel.html'),
+    basePanelHtml = require('raw-loader!./html/base-panel.html'),
     emotes = require('./emotes.js'),
     general = require('./general.js'),
     subreddits = require('./subreddits.js'),
