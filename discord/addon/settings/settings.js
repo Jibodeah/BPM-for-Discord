@@ -34,7 +34,7 @@ var BPM_utils = require('../utils.js'),
     about = require('./about.js'),
     // fragile
     INJECTION_POINT_SELECTOR = 
-        '.layer > .ui-standard-sidebar-view > .content-region > .scroller-wrap > .scroller > .content-column';
+        '.layer > .ui-standard-sidebar-view > .content-region > .content-transition-wrap > .ui-scroller-wrap > .scroller > .content-column';
 
 //Maps subpanel requests to their corresponding init/teardown objects
 var subpanelMap = {
