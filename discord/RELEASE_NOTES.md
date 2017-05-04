@@ -1,19 +1,19 @@
-### [Download BPM for Discord](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.8.21-beta/BPM.for.Discord.discord-v0.8.21-beta.7z)
-### [Download BetterDiscord Version](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.8.21-beta/betterDiscord-bpm.plugin.js)
+### [Download BPM for Discord](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.9.0-beta/BPM.for.Discord.discord-v0.9.0-beta.7z)
+### [Download BetterDiscord Version](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.9.0-beta/betterDiscord-bpm.plugin.js)
 
 ## Changelog
 
-* Updates to [BPM v66.258](https://www.reddit.com/r/betterponymotes/comments/62qrf8/betterponymotes_v66258_20170331/)
+* Updated to support new Discord settings pane
 
 **IF DISCORD UPDATES YOU MAY HAVE TO REINSTALL BPM**
 
-## [Install/Uninstall Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.8.21-beta/discord/INSTALLATION.md)
+## [Install/Uninstall Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.0-beta/discord/INSTALLATION.md)
 
-## [BetterDiscord plugin Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.8.21-beta/discord/BETTERDISCORD.md)
+## [BetterDiscord plugin Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.0-beta/discord/BETTERDISCORD.md)
 
-## [Features](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.8.21-beta/discord/FEATURES.md)
+## [Features](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.0-beta/discord/FEATURES.md)
 
-## [Adding and running custom JavaScript](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.8.21-beta/discord/CUSTOMJS.md)
+## [Adding and running custom JavaScript](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.0-beta/discord/CUSTOMJS.md)
 
 ## Issues
 Please report [at the repo's issues page](https://github.com/ByzantineFailure/bpm/issues)
