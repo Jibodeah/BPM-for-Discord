@@ -1,19 +1,19 @@
-### [Download BPM for Discord](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.9.0-beta/BPM.for.Discord.discord-v0.9.0-beta.7z)
-### [Download BetterDiscord Version](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.9.0-beta/betterDiscord-bpm.plugin.js)
+### [Download BPM for Discord](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.9.1-beta/BPM.for.Discord.discord-v0.9.1-beta.7z)
+### [Download BetterDiscord Version](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.9.1-beta/betterDiscord-bpm.plugin.js)
 
 ## Changelog
 
-* Updated to support new Discord settings pane
+* Updates to [BPM v66.259](https://www.reddit.com/r/betterponymotes/comments/6b2if0/betterponymotes_v66259_20170513)
 
 **IF DISCORD UPDATES YOU MAY HAVE TO REINSTALL BPM**
 
-## [Install/Uninstall Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.0-beta/discord/INSTALLATION.md)
+## [Install/Uninstall Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.1-beta/discord/INSTALLATION.md)
 
-## [BetterDiscord plugin Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.0-beta/discord/BETTERDISCORD.md)
+## [BetterDiscord plugin Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.1-beta/discord/BETTERDISCORD.md)
 
-## [Features](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.0-beta/discord/FEATURES.md)
+## [Features](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.1-beta/discord/FEATURES.md)
 
-## [Adding and running custom JavaScript](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.0-beta/discord/CUSTOMJS.md)
+## [Adding and running custom JavaScript](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.1-beta/discord/CUSTOMJS.md)
 
 ## Issues
 Please report [at the repo's issues page](https://github.com/ByzantineFailure/bpm/issues)
