@@ -139,7 +139,7 @@ function process_text(store, root) {
         var new_elements = [];
         var end_of_prev = 0; // End index of previous emote match
         var match;
-
+        
         // Locate every emote we can in this text node. Each time through,
         // append the text before it and our new emote node to new_elements.
         while(match = emote_regexp.exec(node.data)) {
@@ -222,6 +222,24 @@ function process_text(store, root) {
  * Main function when running globally.
  */
 function run_global(store) {
+    function process_markdown_link(node) {
+        process_element(store, node, store.prefs.showUnknownEmotes);
+        var resolvedEmote = node.getAttribute('data-bpm_emotename');
+        if(resolvedEmote) {
+            node.className += ' bpmote-' + resolvedEmote.substring(1);
+            node.className = node.className.replace('bpm-minified', '');
+            node.innerHTML = '';
+        }
+    }
+    // Supremely inefficient hack, but frankly this is discord-only and
+    // such an edge case I don't feel like putting more effort into it
+    function walk_markdown(root) {
+        // No-op our walked stuff
+        walk_dom(root, Node.ELEMENT_NODE, process_markdown_link, function() {});
+    }
+
+    window.process_element = process_markdown_link;
+    
     //Discord should always have emote search enabled
     if(store.prefs.enableGlobalSearch || platform == "discord-ext") {
         // Never inject the search box into frames. Too many sites fuck up
@@ -235,6 +253,7 @@ function run_global(store) {
     }
 
     process_text(store, document.body);
+    walk_markdown(document.body);
 
     observe_document(function(nodes) {
         for(var i = 0; i < nodes.length; i++) {
@@ -244,6 +263,7 @@ function run_global(store) {
                 continue;
             }
             process_text(store, nodes[i]);
+            walk_markdown(nodes[i]);
         }
     });
 }
