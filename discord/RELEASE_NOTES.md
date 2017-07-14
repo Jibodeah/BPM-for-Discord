@@ -3,7 +3,7 @@
 
 ## Changelog
 
-* Updates to [BPM v66.259](https://www.reddit.com/r/betterponymotes/comments/6b2if0/betterponymotes_v66259_20170513)
+* Updates to [BPM v66.260](https://www.reddit.com/r/betterponymotes/comments/6n6k7q/betterponymotes_v66260_20170713/) 
 
 **IF DISCORD UPDATES YOU MAY HAVE TO REINSTALL BPM**
 
