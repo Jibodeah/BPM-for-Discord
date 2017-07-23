@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+  <!-- communication with extension, where applicable -->
+  <div id="ready" style="display: none">false</div>
+
+  <div class="container">
+  <div class="row">
+  <div class="span8 offset2">
+
+  <form>
+  <fieldset>
+    <legend>Options</legend>
+    <p class="desc">
+    <label class="checkbox"><input id="enableNSFW" type="checkbox"> Enable NSFW emotes</label>
+    Several emotes in BetterPonymotes are strongly NSFW in nature, going as
+    far as to be explicitly pornographic. This option does not cover every
+    emote that you might consider questionable- with a handful of difficult
+    exceptions, the emotes it blocks all contain actual genitalia.</p>
+
+    <p class="desc">
+    <label class="checkbox"><input id="enableExtraCSS" type="checkbox"> Enable extra emote modifiers</label>
+    BetterPonymotes includes a copy of the Chaos script, a collection of
+    flags and modifiers on emotes. These do things like make emotes spin
+    in multiple dimensions. These can be problematic on some computers.</p>
+
+    <p class="desc">
+    <label class="checkbox"><input id="showUnknownEmotes" type="checkbox"> Show placeholders for unknown emotes (may conflict with other emote scripts)</label>
+    When BetterPonymotes encounters a link that appears to be an emote, but
+    it doesn't know about it, it generates a small placeholder to show you.
+    This can conflict if you have other emote scripts that are converting
+    the emotes, as BPM doesn't know about these. Turn this off if you are
+    having conflict problems.</p>
+
+    <p class="desc">
+    <label class="checkbox"><input id="hideDisabledEmotes" type="checkbox"> Hide disabled emotes completely (no placeholders)</label>
+    When BPM encounters an emote you have disabled through any means, it
+    generates a small placeholder. This option turns them off, trying to
+    make them seem to be nonexistent.</p>
+    
+    <p class="desc">
+        <label class="checkbox"><input id="disableDisruptiveEmotes" type="checkbox">Disable disruptive emotes</label>
+        Sometimes other users like to put emotes in annoying places like 
+        usernames, game titles, and channel titles.  Enable this option to 
+        prevent emotes from rendering there.
+    </p>
+
+    <p class="desc">
+        <label class="checkbox"><input id="disableEmotesInCodeBlocks" type="checkbox">Disable emotes in code blocks</label>
+        Some users report wierd issues with scrolling when BPM renders
+        emotes inside code blocks (```-wrapped text).  Enable this option
+        to prevent BPM from rendering them there.
+    </p>
+
+    <p class="desc">
+    <label class="checkbox"><input id="showAltText" type="checkbox"> Reveal hidden alt-text</label>
+    This option controls the alt-text expander, which displays alt-text on
+    emotes next to the image. When BPM does this, it also replaces the
+    actual alt-text with emote information, including its name and where it
+    comes from.</p>
+
+    <p class="desc">
+    <label class="checkbox"><input id="clickToggleSFW" type="checkbox"> When I click a disabled emote, only show SFW emotes</label>
+    When BPM disables an emote and leaves a placeholder, you can click on
+    it to expand it in order to see what it is. Ordinarily, BPM will refuse
+    to do this for NSFW emotes. This option disables that check.</p>
+
+    <p class="desc">
+    <label>Search result limit: <input id="searchLimit" type="text"> (high values can slow down search)</label>
+    BPM has over 8000 emotes, and some search queries return massive amounts of
+    them, which can freeze your browser. This option imposes a maximum on the
+    number of results you can get. A few hundred is safe and recommended.</p>
+
+    <p class="desc">
+    <!--
+      Would be nice to use Bootstrap's input-append/add-on "px", but this
+      screws up alignment somehow.
+    -->
+    <label>Maximum emote size: <input id="maxEmoteSize" type="text"> (zero is no limit)</label>
+    Emotes larger than this size will be disabled. This can help if you
+    find some of the more massive emotes in BPM annoying.</p>
+  </fieldset>
+  </form>
+
+  <form class="form-inline">
+  <fieldset>
+    <legend>Enabled Subreddits</legend>
+    <p class="desc">BPM includes emotes from many different subreddits.
+    You may enable or disable them individually to your preference.</p>
+    <div id="enabledSubreddits"></div>
+    <br>
+    <button type="button" id="enable-all-subreddits" class="btn">Enable all</button>
+    <button type="button" id="disable-all-subreddits" class="btn">Disable all</button>
+  </fieldset>
+  </form>
+
+  <form class="form-inline">
+  <fieldset>
+    <legend>Disabled Emotes</legend>
+    <p class="desc">Emotes listed here will be blocked.</p>
+    <div id="disabledEmotes" class="emote-list-container">
+      <input id="disabledEmotes-input" class="emote-list-input">
+    </div>
+    <button type="button" id="disabledEmotes-clear" class="btn">Clear</button>
+  </fieldset>
+  </form>
+
+  <form class="form-inline">
+  <fieldset>
+    <legend>Whitelisted Emotes</legend>
+    <p class="desc">Emotes listed here will be shown, even if they would
+    otherwise not be. This overrides every other option.</p>
+    <div id="whitelistedEmotes" class="emote-list-container">
+      <input id="whitelistedEmotes-input" class="emote-list-input">
+    </div>
+    <button type="button" id="whitelistedEmotes-clear" class="btn">Clear</button>
+  </fieldset>
+  </form>
+  
+  <legend>About</legend>
+  <p class="desc">BPM for Discord Version: <!-- REPLACE-WITH-DC-VERSION--></p>
+  <p class="desc">BPM Version: <!-- REPLACE-WITH-BPM-VERSION --></p>
+  <p class="desc">BPM for Discord by /u/Chalcedon (c) 2015-2017</p>
+  <p class="desc">BPM by /u/Typhos (c) 2012-2017</p>
+  <p class="desc">BPM and BPM for Discord are licensed via the AGPLv3</p>
+  <legend>Special Thanks<legend>
+  <p class="desc">Thanks to /u/Typhos and the BPM maintainers without whom this wouldn't exist.</p>
+  <p class="desc">Thanks to Jiiks and the BetterDiscordApp maintainers for proving this was even possible.</p>
+  <p class="desc">Thanks to all the users who have provided valuable testing and feedback.</p>
+  <div class=".text-center">[](/twisleep)</div>
+  </div>
+  </div>
+  </div>

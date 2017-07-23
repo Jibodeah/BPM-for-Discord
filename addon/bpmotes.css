@@ -343,6 +343,16 @@
     visibility: inherit;
 }
 
+/* Options tab */
+#bpm-sb-options {
+    height: inherit;
+    display: none; /* default for this tab */
+    overflow-y: scroll;
+    padding: 5px;
+
+    visibility: inherit;
+}
+
 /* Flags tab */
 #bpm-sb-flagtab {
     height: inherit;

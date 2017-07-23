@@ -220,7 +220,9 @@ DISCORD_INTEGRATION := \
 	discord/integration/package.json discord/integration/bpm.js discord/integration/README.md
 
 DISCORD_SETTINGS_SCRIPT := \
-    discord/addon/settings/about.js discord/addon/settings/emotes.js \
+	discord/addon/settings/options.js discord/addon/settings/options.css \
+	discord/addon/settings/options.html discord/addon/settings/index.js 
+    #discord/addon/settings/about.js discord/addon/settings/emotes.js \
     discord/addon/settings/general.js discord/addon/settings/search.js \
     discord/addon/settings/subreddits.js discord/addon/settings/updates.js \
     discord/addon/settings/settings.js discord/addon/utils.js \
@@ -255,7 +257,6 @@ discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
 	cp build/betterponymotes.js discord/addon/core/
 	cp build/bpm-resources.js discord/addon/core/
 	cp build/emote-classes.css discord/addon/core/
-	cp build/gif-animotes.css discord/addon/core/
 	
 	cd discord/addon && npm install
 	cd discord/addon && webpack bpm.js ../../build/discord/bpm.js

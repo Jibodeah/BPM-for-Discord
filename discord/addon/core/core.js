@@ -7,7 +7,8 @@
  * before the webpack occurs.
  **/
 
-var utils = require('../utils');
+var utils = require('../utils'),
+    initOptions = require('../settings/index.js');
 
 var cssMap = {};
 cssMap['/emote-classes.css'] = require('raw-loader!./emote-classes.css');
@@ -47,8 +48,12 @@ window.addEventListener('bpm_backend_message', function(event) {
             }
             chatbox.value = chatbox.value + "[](" + message.emote + ")";
             break;
+        case 'init_options':
+            var target = message.target;
+            initOptions(target);
+            break;
         default:
-            console.log('BPM: unrecognized discord message: ' + message.method);
+            throw new Error('BPM: unrecognized discord message: ' + message.method, message);
             break;
     }
 });

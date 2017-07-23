@@ -253,13 +253,6 @@ case "discord-ext":
         window.dispatchEvent(event);
     };
 
-    linkify_options = function(element) {
-        element.addEventListener("click", catch_errors(function(event) {
-            //TODO:  Automatically open the BPM settings
-            alert('Use the BPM tab under the settings panel');
-        }), false);
-    };
-
     window.addEventListener("bpm_message", catch_errors(function(event) {
         var message = event.data;
         switch(message.method) {

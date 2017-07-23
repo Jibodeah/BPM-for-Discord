@@ -21,6 +21,7 @@ var sb_helplink = null;
 var sb_flagtab = null;
 var sb_flaglink = null;
 var sb_optionslink = null;
+var sb_optionstab = null;
 var sb_resize = null;
 var sb_global_icon = null; // Global << thing
 
@@ -69,6 +70,7 @@ function inject_search_box() {
           '</div>',
           '<div id="bpm-sb-tabframe">',
             '<div id="bpm-sb-results"></div>',
+            '<div id="bpm-sb-options"></div>',
             '<div id="bpm-sb-helptab">',
               '<p class="bpm-sb-help">Simple search terms will show you ',
                 'emotes with names that match: for instance, <code>"aj"',
@@ -194,6 +196,7 @@ function inject_search_box() {
     sb_flagtab = document.getElementById("bpm-sb-flagtab");
     sb_flaglink = document.getElementById("bpm-sb-flaglink");
     sb_optionslink = document.getElementById("bpm-sb-optionslink");
+    sb_optionstab = document.getElementById('bpm-sb-options');
     sb_resize = document.getElementById("bpm-sb-resize");
 
     sb_global_icon = document.getElementById("bpm-global-icon");
@@ -290,7 +293,22 @@ function init_search_ui(store) {
     }), false);
 
     // Set up the options page link
-    linkify_options(sb_optionslink);
+    // DISCORD-SPECIFIC-CODE
+    if (platform === 'discord-ext') {
+        sb_optionslink.addEventListener('click', catch_errors(function(event) {
+            if(current_sb_tab !== sb_optionstab) {
+                switch_to_sb_tab(sb_optionstab);
+            } else {
+                switch_to_sb_tab(sb_results);
+            }
+        }), false);
+        // Hand init over to the discord-specific code
+        var optionsInitEvent = new CustomEvent('bpm_backend_message');
+        optionsInitEvent.data = { method: 'init_options', target: document.getElementById('bpm-sb-options') };
+        window.dispatchEvent(optionsInitEvent);
+    } else {
+        linkify_options(sb_optionslink);
+    }
 
     // Focusing input switches to results tab
     sb_input.addEventListener("focus", catch_errors(function(event) {
@@ -493,7 +511,7 @@ function hide_search_box() {
 }
 
 function switch_to_sb_tab(tab) {
-    var tabs = [sb_results, sb_helptab, sb_flagtab];
+    var tabs = [sb_results, sb_helptab, sb_flagtab, sb_optionstab];
     for(var i = 0; i < tabs.length; i++) {
         tabs[i].style.display = "none";
     }
