@@ -1,19 +1,20 @@
-### [Download BPM for Discord](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.9.1-beta/BPM.for.Discord.discord-v0.9.1-beta.7z)
-### [Download BetterDiscord Version](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.9.1-beta/betterDiscord-bpm.plugin.js)
+### [Download BPM for Discord](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.10.0-beta/BPM.for.Discord.discord-v0.10.0-beta.7z)
+### [Download BetterDiscord Version](https://github.com/ByzantineFailure/BPM-for-Discord/releases/download/discord-v0.10.0-beta/betterDiscord-bpm.plugin.js)
 
 ## Changelog
 
-* Updates to [BPM v66.260](https://www.reddit.com/r/betterponymotes/comments/6n6k7q/betterponymotes_v66260_20170713/) 
+* **SETTINGS ARE NOW FOUND IN THE SEARCH BOX. PLEASE SEE: https://www.reddit.com/r/betterponymotes/comments/6p4umm/bpm_for_discord_settings_fixed_animotes_borked/**
+* Fixes an issue where emote names would not be inserted into the chat window
 
 **IF DISCORD UPDATES YOU MAY HAVE TO REINSTALL BPM**
 
-## [Install/Uninstall Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.1-beta/discord/INSTALLATION.md)
+## [Install/Uninstall Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.10.0-beta/discord/INSTALLATION.md)
 
-## [BetterDiscord plugin Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.1-beta/discord/BETTERDISCORD.md)
+## [BetterDiscord plugin Instructions](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.10.0-beta/discord/BETTERDISCORD.md)
 
-## [Features](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.1-beta/discord/FEATURES.md)
+## [Features](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.10.0-beta/discord/FEATURES.md)
 
-## [Adding and running custom JavaScript](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.9.1-beta/discord/CUSTOMJS.md)
+## [Adding and running custom JavaScript](https://github.com/ByzantineFailure/BPM-for-Discord/blob/discord-v0.10.0-beta/discord/CUSTOMJS.md)
 
 ## Issues
 Please report [at the repo's issues page](https://github.com/ByzantineFailure/bpm/issues)
