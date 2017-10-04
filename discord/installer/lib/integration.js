@@ -20,7 +20,7 @@ function modifyDiscord(paths) {
     extractApp(paths);
     addPackageDependency(paths);
     injectBpm(paths);
-    packApp(paths);
+    return packApp(paths);
 }
 
 function backupCleanDiscord(paths) {
@@ -48,12 +48,18 @@ function packApp(paths) {
         throw new Error('Packing without extract path, something went horribly wrong');
     }
     console.log('Packing injected asar...');
-    asar.createPackage(paths.discordExtract, paths.discordPack, () => {
-        console.log('Packing complete!');
-        console.log('Cleaning up unpacked data...');
-        fs.removeSync(paths.discordExtract);
-        console.log('Cleaned up unpacked data.');
-        process.exit();
+    return new Promise((res, rej) => {
+        asar.createPackage(paths.discordExtract, paths.discordPack, () => {
+            try {
+                console.log('Packing complete!');
+                console.log('Cleaning up unpacked data...');
+                fs.removeSync(paths.discordExtract);
+                console.log('Cleaned up unpacked data.');
+                res();
+            } catch (e) {
+                rej(e);
+            }
+        });
     });
 }
 

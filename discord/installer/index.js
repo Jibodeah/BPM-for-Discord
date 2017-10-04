@@ -36,8 +36,12 @@ var paths = require('./lib/paths').getPaths(sourceRoot, isPTB, discordRoot),
 console.log('Paths results are:');
 console.log(JSON.stringify(paths, null, ' '));
 
-integration.modifyDiscord(paths);
-addon.extractAddonCode(paths);
+integration.modifyDiscord(paths).then(() => {
+    addon.extractAddonCode(paths);
+    console.log('Injection complete!');
+}).catch(e => {
+    console.log('Error installing:');
+    console.log(e);    
+});
 
-console.log('Injection complete!');
 
