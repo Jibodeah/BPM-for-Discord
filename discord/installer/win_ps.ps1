@@ -26,6 +26,7 @@ function Download-Node {
         }
         Write-Host "Removing downloaded node binary..."
         Remove-Item $node_output
+        Write-Host "Install Complete!"
     } else {
         Write-Host "Input was not 'y' or 'Y', quitting without installing BPM..."
         exit
@@ -40,8 +41,10 @@ if (Get-Command node.exe -errorAction SilentlyContinue) {
         Write-Host "Version is v4.2.x, running installer..."
         if($isPTB) {
             node.exe $install_script $installer_directory --ptb
+            Write-Host "Install Complete!"
         } else {
             node.exe $install_script $installer_directory
+            Write-Host "Install Complete!"
         }
     } else {
         Download-Node

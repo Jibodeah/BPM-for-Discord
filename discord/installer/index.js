@@ -39,5 +39,5 @@ console.log(JSON.stringify(paths, null, ' '));
 integration.modifyDiscord(paths);
 addon.extractAddonCode(paths);
 
-console.log('Install complete!');
+console.log('Injection complete!');
 

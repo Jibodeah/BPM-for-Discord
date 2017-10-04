@@ -11,6 +11,7 @@ downloadNodeAndInstall() {
     echo "Removing node tarball and extract..."
     rm -rf "$DIR/node"
     rm -f "$DIR/node.tar.gz"
+    echo "Install Complete!"
 }
 
 if [ -z $(which node) ]; then
@@ -24,6 +25,7 @@ else
     else    
         echo "Could not find node of version v4.2.x, found node version $NODE_VERSION"
         downloadNodeAndInstall
+	echo "Install Complete!"
     fi
 fi
 

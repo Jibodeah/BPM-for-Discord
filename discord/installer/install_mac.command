@@ -11,6 +11,7 @@ downloadNodeAndInstall() {
     echo "Removing node tarball and extract..."
     rm -rf "$DIR/node"
     rm -f "$DIR/node.tar.gz"
+    echo "Install complete!"
 }
 
 if [ -z $(which node) ]; then
@@ -21,6 +22,7 @@ else
     if [[ $NODE_VERSION == *"v4.2"* ]]; then
         echo "Found node, running with local version...";
         node "$DIR/index.js" "$DIR"
+	echo "Install complete!"
     else    
         echo "Could not find node of version v4.2.x, found node version $NODE_VERSION"
         downloadNodeAndInstall
