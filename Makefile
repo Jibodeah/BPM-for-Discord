@@ -243,7 +243,7 @@ DISCORD_CORE_SCRIPT := \
 	discord/addon/core/background.js discord/addon/core/core.js
 
 DISCORD_ADDON_SCRIPT := $(DISCORD_CORE_DATA) $(DISCORD_SEARCH_SCRIPT) $(DISCORD_UPDATES_SCRIPT) \
-                        $(DISCORD_SETTINGS_SCRIPT) $(ADDON_DATA)
+                        $(DISCORD_SETTINGS_SCRIPT) $(ADDON_DATA) build/gif-animotes.css
 
 discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
 	mkdir -p build/discord/addon
@@ -257,6 +257,7 @@ discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
 	cp build/betterponymotes.js discord/addon/core/
 	cp build/bpm-resources.js discord/addon/core/
 	cp build/emote-classes.css discord/addon/core/
+	cp build/gif-animotes.css discord/addon/core/
 	
 	cd discord/addon && npm install
 	cd discord/addon && webpack bpm.js ../../build/discord/bpm.js

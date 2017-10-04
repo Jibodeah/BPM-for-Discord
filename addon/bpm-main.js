@@ -48,7 +48,6 @@ function init_css(store) {
         }
 
         add_css(store.custom_css);
-/* Commented out for Discord to see how things work w/o it
         // This needs to come after subreddit CSS to override their !important,
         // so just use document.head directly.
         if(platform === "chrome-ext" || platform === "discord-ext") {
@@ -62,7 +61,6 @@ function init_css(store) {
                 }
             });
         }
-*/
     });
 
     with_dom(function() {
