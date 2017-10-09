@@ -33,8 +33,11 @@ function getChatInputTextarea() {
 // https://github.com/ByzantineFailure/BPM-for-Discord/issues/92
 function updateTextarea(node, value) {
     // So, react actually puts its own `setter` for `value` on any node that's
-    // part of an input for a react component.  In order to actually get state
-    // changes triggered, we have to delete this setter and re-set our value.
+    // part of an input for a react component.  This setter updates its internal
+    // state tracker which means if we percolate out an event it won't pick up
+    // our changes.  
+    // In order to actually get state changes triggered, we have to delete this 
+    // setter and re-set our value.
     // We are comfortable w/ this because React doesn't make this happen in
     // safari or if a getter/setter already exists anyway.
     delete node.value;
