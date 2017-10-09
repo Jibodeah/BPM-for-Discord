@@ -29,6 +29,22 @@ function getChatInputTextarea() {
     }
 }
 
+// Shennanigans to get around React's BS.  See the below link for details
+// https://github.com/ByzantineFailure/BPM-for-Discord/issues/92
+function updateTextarea(node, value) {
+    // So, react actually puts its own `setter` for `value` on any node that's
+    // part of an input for a react component.  In order to actually get state
+    // changes triggered, we have to delete this setter and re-set our value.
+    // We are comfortable w/ this because React doesn't make this happen in
+    // safari or if a getter/setter already exists anyway.
+    delete node.value;
+    node.value = value;
+    // Trigger an event which bubbles up to React's global event handler so we can
+    // make sure we update Discord's internal State.
+    const event = new Event('change', { target: node, bubbles: true, cancelable: false });
+    node.dispatchEvent(event);
+}
+
 window.addEventListener('bpm_backend_message', function(event) {
     var message = event.data;
     switch(message.method) {
@@ -46,7 +62,8 @@ window.addEventListener('bpm_backend_message', function(event) {
                 console.log('Cannot add search emote "' + message.emote + '", chat textarea does not exist');
                 return;
             }
-            chatbox.value = chatbox.value + "[](" + message.emote + ")";
+            var newValue = chatbox.value + "[](" + message.emote + ")";
+            updateTextarea(chatbox, newValue);
             break;
         case 'init_options':
             var target = message.target;
