@@ -376,6 +376,7 @@ function run(prefs) {
     manage_option(prefs, "clickToggleSFW");
     manage_option(prefs, "disableDisruptiveEmotes");
     manage_option(prefs, "disableEmotesInCodeBlocks");
+    manage_option(prefs, "searchButtonTopRight");
     manage_number(prefs, "searchLimit", 250);
     manage_number(prefs, "maxEmoteSize", 0);
 
