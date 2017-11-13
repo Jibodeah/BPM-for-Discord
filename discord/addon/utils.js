@@ -35,7 +35,7 @@ function waitForElementById(id, callback) {
 function waitByQuerySelector(selector, callback) {
     var element = document.querySelector(selector);
     if(!element) {
-        window.setTimeout(function() { waitForElementById(selector, callback); }, 100);
+        window.setTimeout(function() { waitByQuerySelector(selector, callback); }, 100);
     } else {
         callback(element);
     }

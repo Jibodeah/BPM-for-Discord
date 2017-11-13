@@ -11,6 +11,8 @@
 require('!style-loader!css-loader!./search.css');
 
 var BPM_utils = require('../utils.js'),
+    TOP_RIGHT_QUERY_SELECTOR = '[class*=title-] > [class*=flex-]',
+    BOTTOM_LEFT_QUERY_SELECTOR = '.guilds-wrapper',
     searchButton;
 
 // We rely on BPM's core code to attach this listener.
@@ -18,16 +20,17 @@ var BPM_utils = require('../utils.js'),
 // because we are bad people and cannot maintain a consistent
 // reference to it otherwise.
 function createSearchButton(prefs) {
-    var className = prefs.searchButtonTopRight ? 'header-toolbar' : 'guilds-wrapper';
-    BPM_utils.waitForElementByClass(className, function(container) {
+    var querySelector = prefs.searchButtonTopRight ? TOP_RIGHT_QUERY_SELECTOR : BOTTOM_LEFT_QUERY_SELECTOR;
+    BPM_utils.waitByQuerySelector(querySelector, function(container) {
         var elementType = prefs.searchButtonTopRight ? 'button' : 'div';
-        
         searchButton = document.createElement(elementType);
         searchButton.className = 'bpm-emote-search-button' + 
             (prefs.searchButtonTopRight ? '' : ' bpm-emote-search-button-bottom-left');
+        console.log('added search button');
         
         container.appendChild(searchButton);
         if(prefs.searchButtonTopRight) {
+            console.log('prefs found');
             listenOnAppChange();
         }
     });
@@ -42,9 +45,10 @@ function createSearchButton(prefs) {
 // hook into Discord's React code somehow (we cannot do that).
 function listenOnAppChange() {
     var appDiv = document.getElementsByClassName('app')[0];
+    console.log('Listening on app change');
     var observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(e) {
-            var headerToolbar = document.getElementsByClassName('header-toolbar')[0];
+            var headerToolbar = document.querySelector(TOP_RIGHT_QUERY_SELECTOR);
             if(!headerToolbar) {
                 return;
             }
