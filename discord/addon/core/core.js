@@ -20,12 +20,17 @@ cssMap['/extracss-pure.css'] = require('raw-loader!./extracss-pure.css');
 cssMap['/extracss-webkit.css'] = require('raw-loader!./extracss-webkit.css');
 
 function getChatInputTextarea() {
-    var sendbox = document.querySelector('.channel-text-area-default > [class*=inner] > textarea');
-    if(sendbox.length === 0) {
+    var sendboxContainer = document.querySelector('[class*=channelTextArea]');
+    if(sendboxContainer === null) {
         return null;
     }
+
+    var sendbox = sendboxContainer.querySelector('textarea');
+    if(sendbox=== null) {
+        return null
+    }
     else {
-        return sendbox ;
+        return sendbox;
     }
 }
 
