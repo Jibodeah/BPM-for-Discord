@@ -1,5 +1,6 @@
 param (
-    [switch]$isPTB = $false
+    [switch]$isPTB = $false,
+    [switch]$isCanary = $false
 )
 
 $node_url = "https://nodejs.org/dist/v4.2.4/win-x86/node.exe"
@@ -21,6 +22,8 @@ function Download-Node {
         Write-Host "Running installer..."
         if($isPTB) {
             & $node_output $install_script $installer_directory --ptb
+        } ElseIf($isCanary) {
+            & $node_output $install_script $installer_directory --canary
         } else {
             & $node_output $install_script $installer_directory
         }
@@ -42,6 +45,8 @@ if (Get-Command node.exe -errorAction SilentlyContinue) {
         if($isPTB) {
             node.exe $install_script $installer_directory --ptb
             Write-Host "Install Complete!"
+        } ElseIf($isCanary) {
+            node.exe $install_script $installer_directory --canary
         } else {
             node.exe $install_script $installer_directory
             Write-Host "Install Complete!"

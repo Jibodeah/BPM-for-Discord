@@ -9,10 +9,14 @@
     "lint": "jshint **.js"
   },
   "dependencies": {
+    "archiver": "^2.1.0",
     "asar": "~0.9.0",
+    "co": "^4.6.0",
+    "extract-zip": "^1.6.6",
     "fs-extra": "~0.26.3",
+    "lodash": "^4.3.0",
     "minimist": "~1.2.0",
-    "lodash": "^4.3.0"
+    "unzip": "^0.1.11"
   },
   "devDependencies": {
     "jshint": "latest"
@@ -20,12 +24,11 @@
   "jshintConfig": {
     "esnext": true,
     "strict": "global",
-    "globals": { 
-        "console": false,
-        "require": false,
-        "module": false,
-        "process": false
+    "globals": {
+      "console": false,
+      "require": false,
+      "module": false,
+      "process": false
     }
   }
 }
-

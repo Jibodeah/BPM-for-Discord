@@ -5,7 +5,8 @@
  * Installer entry point
  *
  * FLAGS:
- * --ptb : Install to the PTB client
+ * --ptb : Install to the PTB client.  Cannot be used with --canary
+ * --canary : Install to the canary client.  Cannot be used with --ptb
  * -p : Feed in the path to discord (Linux only)
  * POSITIONAL 1: Path to installer directory
  **/
@@ -13,6 +14,7 @@
 var args = require('minimist')(process.argv.slice(2)),
     sourceRoot = args._[0],
     isPTB = args.ptb,
+    isCanary = args.canary,
     discordRoot = args.p;
 
 console.log(args);
@@ -23,13 +25,18 @@ if(!sourceRoot) {
     return;
 }
 
+if (isCanary && isPTB) {
+    console.log('Cannot specify both --canary and --ptb!');
+    return;
+}
+
 if ((!discordRoot || discordRoot === true) && process.platform === 'linux') {
     throw new Error('You must specify [-p PATH_TO_DISCORD] on linux!');
 } else if (discordRoot && process.platform !== 'linux') {
     throw new Error('You may not specify -p on a non-linux platform!');
 }
 
-var paths = require('./lib/paths').getPaths(sourceRoot, isPTB, discordRoot),
+var paths = require('./lib/paths').getPaths(sourceRoot, isPTB, isCanary, discordRoot),
     integration = require('./lib/integration'),
     addon = require('./lib/addon');
 
@@ -41,7 +48,7 @@ integration.modifyDiscord(paths).then(() => {
     console.log('Injection complete!');
 }).catch(e => {
     console.log('Error installing:');
-    console.log(e);    
+    console.log(e.stack);
 });
 
 
