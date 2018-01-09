@@ -18,8 +18,8 @@ function getPaths(sourceRoot, isPTB, isCanary, discordRoot) {
     var discordPath = getDiscordPath(isPTB, isCanary, discordRoot);
     return {
         discordRoot: discordPath,
-        discordDesktopCorePath: path.join(discordPath, 'discord_desktop_core'),
-        discordDesktopCoreBackup: path.join(discordPath, 'discord_desktop_core.clean'),
+        discordDesktopCoreAsar: path.join(discordPath, 'discord_desktop_core', 'core.asar'),
+        discordDesktopCoreBackup: path.join(discordPath,'discord_desktop_core', 'core.asar.clean'),
         discordExtract: path.join(discordPath, 'bpm_extract'),
         discordPack: path.join(discordPath, 'app.asar'),
         discordBackup: path.join(discordPath, 'app.asar.clean'),
@@ -30,6 +30,17 @@ function getPaths(sourceRoot, isPTB, isCanary, discordRoot) {
         addonCustom: path.join(getAddonExtractPath(discordRoot), 'bpm', 'custom'),
         addonCustomBackup: path.join(getAddonExtractPath(discordRoot), '..', 'bpm_custom.bak')
     };
+}
+
+function modulesPathExists(path) {
+    try {
+        fs.statSync(path);
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            console.log('Cannot find discord modules.  Please run discord once before installing!');
+            process.exit(1);
+        }
+    }
 }
 
 function getAddonExtractPath(discordRoot) {
@@ -46,47 +57,47 @@ function getAddonExtractPath(discordRoot) {
 }
 
 function getDiscordPath(isPTB, isCanary, discordRoot) {
+    var baseLocation;
+    const localDataFolder = isPTB ? 'discordptb' : isCanary ? 'discordcanary' : 'discord';
     switch(OS) {
         case 'win32':
-            // We don't give a shit about case in windows.  For once, this is a good thing (reverse compat.)
-            const localDataFolder = isPTB ? 'DiscordPTB' : isCanary ? 'DiscordCanary' : 'Discord',
-                envFolder = isCanary ? process.env.APPDATA : process.env.LOCALAPPDATA,
-                discordFolder = path.join(envFolder, localDataFolder),
-                contents = fs.readdirSync(discordFolder);
-            //Consider this carefully, we may want to fail on a new version
-            const folder = _(contents)
-                // Only get directories
-                .filter(file => fs.statSync(path.join(discordFolder, file)).isDirectory())
-                // Starts with an integer or starts with "app-".  Reverse compat.
-                .filter(file => file.indexOf('app-') > -1 || parseInt(file.charAt(0)) || parseInt(file.charAt(0)) === 0)
-                //Sort by version number, multiple app version folders can exist
-                .map(dir => {
-                    // Support starting with "app-" -- reverse compat.
-                    var version = dir.includes('-') ? dir.split('-')[1] : dir;
-                    var splitVersion = version.split('.');
-                    return {
-                        name: dir,
-                        major: parseInt(splitVersion[0]),
-                        minor: parseInt(splitVersion[1]),
-                        bugfix: parseInt(splitVersion[2])
-                    };
-                })
-                .sortBy(["major", "minor", "bugfix"])
-                .last()
-                .name;
-            
-            const intermediate = path.join(discordFolder, folder),
-                useModules = fs.existsSync(path.join(intermediate, 'modules')),
-                finalDir = useModules ? 'modules' : 'resources';
-
-            return path.join(discordFolder, folder, finalDir); 
+            baseLocation = path.join(process.env.APPDATA, localDataFolder);
+            break;
         // TODO:  Make this shit work for linux/mac
         case 'darwin':
-            return '/Applications/Discord' + (isPTB ? ' PTB' : '') + '.app/Contents/Resources';
+            baseLocation = path.join(process.env.HOME, 'Library', 'Application Support', localDataFolder);
+            break;
         case 'linux':
-            return path.join(discordRoot, 'resources');
+            baseLocation = path.join(discordRoot, 'resources');
+            break;
         default:
             throw new Error('Unsupported OS ' + OS);
     }
+    modulesPathExists(baseLocation);
+    const contents = fs.readdirSync(baseLocation),
+        version = getLatestVersionNumber(contents, baseLocation);
+
+    return path.join(baseLocation, version, 'modules');
+}
+
+function getLatestVersionNumber(contents, root) {
+    return _(contents)
+        // Only get directories
+        .filter(file => fs.statSync(path.join(root, file)).isDirectory())
+        // Starts with an integer or starts with "app-".  Reverse compat.
+        .filter(directory => parseInt(directory.charAt(0)) || parseInt(directory.charAt(0)) === 0)
+        //Sort by version number, multiple app version folders can exist
+        .map(directory => {
+            var splitVersion = directory.split('.');
+            return {
+                name: directory,
+                major: parseInt(splitVersion[0]),
+                minor: parseInt(splitVersion[1]),
+                bugfix: parseInt(splitVersion[2])
+            };
+        })
+        .sortBy(["major", "minor", "bugfix"])
+        .last()
+        .name;
 }
 
