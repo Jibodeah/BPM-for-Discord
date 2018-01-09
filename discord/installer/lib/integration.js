@@ -19,9 +19,7 @@ module.exports = {
 };
 
 function modifyDiscord(paths) {
-    const useDesktopCore = fileExists(paths.discordDesktopCorePath),
-        installer = useDesktopCore ? new DesktopCoreInstaller(paths) 
-            : new AsarInstaller(paths);
+    const installer = new DesktopCoreInstaller(paths);
 
     // Return a promise for when we're done 
     // Just yield everything -- any of these steps may now be async
@@ -42,135 +40,43 @@ function DesktopCoreInstaller(paths) {
     // Modify in place
     // Profit
     function desktopCore_backupCleanDiscord() {
-        if(!fs.existsSync(paths.discordDesktopCorePath)) {
+        if(!fs.existsSync(paths.discordDesktopCoreAsar)) {
             throw new Error('Cannot find path to discord!  Try running Discord (or the canary) once before installing.');
         }
         if(fs.existsSync(paths.discordDesktopCoreBackup)) {
-            console.log('Pre-existing discord_desktop_core.clean found, using that...');
+            console.log('Pre-existing core.asar.clean found, using that...');
         } else {
-            console.log('Backing up old discord_desktop_core...');
-            fs.copySync(paths.discordDesktopCorePath, paths.discordDesktopCoreBackup);
-            console.log('Old discord_desktop_core.zip backed up to ' + paths.discordDesktopCoreBackup);
+            console.log('Backing up old core.asar...');
+            fs.copySync(paths.discordDesktopCoreAsar, paths.discordDesktopCoreBackup);
+            console.log('Old core.asar backed up to ' + paths.discordDesktopCoreBackup);
         }
         return new Promise((res) => res());
     }
 
     function desktopCore_extractApp() {
-        fs.removeSync(paths.discordDesktopCorePath);
-        fs.copySync(paths.discordDesktopCoreBackup, paths.discordDesktopCorePath);
+        asar.extractAll(paths.discordDesktopCoreBackup, paths.discordExtract);
         return new Promise((res) => { res() });
-        /*
-        return new Promise((res, rej) => {
-            // Check if exists?
-            fs.removeSync(paths.discordDesktopCoreExtract);
-            fs.mkdirSync(paths.discordDesktopCoreExtract);
-            var extractor = unzip.Extract({ path: paths.discordDesktopCoreExtract });
-            extractor.on('error', rej);
-            extractor.on('close', res);
-            console.log('Unpacking discord_desktop_core.zip.clean to ' + paths.discordDesktopCoreExtract);
-            fs.createReadStream(paths.discordDesktopCoreBackup).pipe(extractor);
-        });
-        */
     }
     
     function desktopCore_addPackageDependency() {
-        addPackageDependency(paths.discordDesktopCorePath, paths.integrationSource);
+        addPackageDependency(paths.discordExtract, paths.integrationSource);
         return new Promise((res) => res());
     }
 
     function desktopCore_injectBpm() {
-        const injectionFile = path.join(paths.discordDesktopCorePath, 'app', 'mainScreen.js');
+        const injectionFile = path.join(paths.discordExtract, 'app', 'mainScreen.js');
         
         injectBpm(injectionFile);
         return new Promise((res) => res());
     }
 
     function desktopCore_packApp() {
-        return new Promise((res) => res());
-        /*
-        return new Promise((res, rej) => {
-            console.log('Packing injected module...');
-            const archive = archiver('zip'),
-                output = fs.createWriteStream(paths.discordDesktopCorePath);
-
-            archive.on('error', rej);
-            archive.on('warning', err => {
-                if(err.code === 'ENOENT') {
-                    console.log(err);
-                }
-                else {
-                    rej(err);
-                }
-            });
-            output.on('close', () => {
-                console.log('Packing complete!');
-                console.log('Cleaning up unpacked data...');
-                fs.removeSync(paths.discordDesktopCoreExtract);
-                console.log('Cleaned up unpacked data.');
-                res();
-            });
-
-            archive.pipe(output);
-            archive.directory(paths.discordDesktopCoreExtract, false);
-            archive.finalize();
-        });
-        */
-    }
-
-    this.backupCleanDiscord = desktopCore_backupCleanDiscord.bind(this);
-    this.extractApp = desktopCore_extractApp.bind(this);
-    this.addPackageDependency = desktopCore_addPackageDependency.bind(this);
-    this.injectBpm = desktopCore_injectBpm.bind(this);
-    this.packApp = desktopCore_packApp.bind(this);
-}
-
-// Asar-based functionality (canary has discarded this)
-function AsarInstaller(paths) {
-    function asar_backupCleanDiscord() {
-        if(fs.existsSync(paths.discordBackup)) {
-            console.log('Pre-existing app.asar.clean found, using that...');
-        } else {
-            console.log('Backing up old app.asar...');
-            fs.copySync(paths.discordPack, paths.discordBackup);
-            console.log('Old app.asar backed up to ' + paths.discordBackup);
-        }
-        return new Promise((res) => res());
-    }
-
-    function asar_extractApp() {
-        console.log('Extracting app.asar from ' + paths.discordBackup + ' ...');
-        if(fs.existsSync(paths.discordExtract)) {
-            fs.removeSync(paths.discordExtract);
-            console.log('Removed pre-existing app extraction');
-        }
-        asar.extractAll(paths.discordBackup, paths.discordExtract);
-        console.log('App extraction complete!');
-        return new Promise((res) => res());
-    }
-
-    function asar_addPackageDependency() {
-        addPackageDependency(paths.discordExtract, paths.integrationSource);
-        return new Promise((res) => res());
-    }
-
-    function asar_injectBpm() {
-        var indexPath = path.join(paths.discordExtract, 'app', 'index.js');
-       
-        if (!fileExists(indexPath)) {
-            indexPath = path.join(paths.discordExtract, 'index.js');
-        }
-        
-        injectBpm(indexPath);
-        return new Promise((res) => res());
-    }
-
-    function asar_packApp() {
         if(!fs.existsSync(paths.discordExtract)) {
             throw new Error('Packing without extract path, something went horribly wrong');
         }
         console.log('Packing injected asar...');
         return new Promise((res, rej) => {
-            asar.createPackage(paths.discordExtract, paths.discordPack, () => {
+            asar.createPackage(paths.discordExtract, paths.discordDesktopCoreAsar, () => {
                 try {
                     console.log('Packing complete!');
                     console.log('Cleaning up unpacked data...');
@@ -184,11 +90,11 @@ function AsarInstaller(paths) {
         });
     }
 
-    this.backupCleanDiscord = asar_backupCleanDiscord.bind(this);
-    this.extractApp = asar_extractApp.bind(this);
-    this.addPackageDependency = asar_addPackageDependency.bind(this);
-    this.injectBpm = asar_injectBpm.bind(this);
-    this.packApp = asar_packApp.bind(this);
+    this.backupCleanDiscord = desktopCore_backupCleanDiscord.bind(this);
+    this.extractApp = desktopCore_extractApp.bind(this);
+    this.addPackageDependency = desktopCore_addPackageDependency.bind(this);
+    this.injectBpm = desktopCore_injectBpm.bind(this);
+    this.packApp = desktopCore_packApp.bind(this);
 }
 
 function addPackageDependency(extractPath, integrationSource) {
