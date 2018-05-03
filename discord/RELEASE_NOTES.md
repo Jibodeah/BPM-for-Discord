@@ -3,7 +3,7 @@
 
 ## Changelog
 
-* Fixes major breakage where BPM would fail to run rooted in Discord's newer, updated electron version no longer having certain indicator flags BPM relied on.  This change 100% breaks "we will merge back to BPM core someday", but that's life.
+* Updates to [BPM v66.265](https://www.reddit.com/r/betterponymotes/comments/8gn918/betterponymotes_v66265_20180502/)
 
 **IF DISCORD UPDATES YOU MAY HAVE TO REINSTALL BPM**
 
