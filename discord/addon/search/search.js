@@ -75,5 +75,22 @@ function listenOnAppChange() {
     observer.observe(appDiv, { childList: true, subtree: true });
 }
 
+
+/* React doesn't know about our search input, which means if we start
+ * typing after having the chat input focused, the global listener
+ * catches our keydown before the event's default action can happen.
+ * This results in the chat input being focused and getting our keypress
+ * rather than the emote searchbox.  For more details, see:
+ * https://github.com/ByzantineFailure/BPM-for-Discord/issues/99
+ */ 
+BPM_utils.waitForElementById('bpm-sb-input', (searchInput) => {
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.target !== searchInput) {
+      return;
+    }
+    event.stopPropagation();
+  });
+});
+
 BPM_utils.retrievePrefs(createSearchButton);
 
