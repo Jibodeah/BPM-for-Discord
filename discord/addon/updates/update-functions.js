@@ -6,6 +6,8 @@
  * update notification elements/alerts
  **/
 
+const utils = require('../utils');
+
 module.exports = {
     checkForUpdates: checkForUpdates
 };
@@ -80,8 +82,10 @@ function addUpdatesNotifier(url) {
     link.href = url;
     link.target = '_blank';
     link.appendChild(document.createTextNode('Update'));
-    
-    var container = document.querySelector('div.guilds');
-    container.insertBefore(guildDiv, container.firstChild);
+
+    utils.waitByQuerySelector('div.guilds', (container) => {
+            console.log('found div.guilds');
+        container.insertBefore(guildDiv, container.firstChild);
+    });
 }
 
