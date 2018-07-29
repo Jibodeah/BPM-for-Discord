@@ -15,19 +15,13 @@ __pycache__
 #Discord ignores
 /discord/installer/node_modules/
 /discord/addon/node_modules/
+/discord/addon/dist/
+/discord/integration/emote_data.json
 
 /discord/addon/core/*.css
 /discord/addon/core/betterponymotes.js
 /discord/addon/core/bpm-resources.js
 /discord/addon/core/pref-setup.js
-
-/discord/translate_urls/export.json
-/discord/translate_urls/data/*.png
-/discord/translate_urls/data/*.gif
-/discord/translate_urls/data/*.jpeg
-/discord/translate_urls/data/*.jpg
-/discord/translate_urls/dist/*
-/discord/translate_urls/node_modules/*
 
 # Other stuff
 /misc

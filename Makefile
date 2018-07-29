@@ -218,7 +218,8 @@ build/BPM.safariextension: $(ADDON_DATA) addon/sf-Settings.plist addon/sf-backgr
 #DC_BPM_ARCHIVE_PASSWORD= 
 
 DISCORD_INTEGRATION := \
-	discord/integration/package.json discord/integration/bpm.js discord/integration/README.md
+ 	discord/integration/package.json discord/integration/bpm.js discord/integration/README.md \
+    build/export.json
 
 DISCORD_SETTINGS_SCRIPT := \
 	discord/addon/settings/options.js discord/addon/settings/options.css \
@@ -261,7 +262,8 @@ discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
 	cp build/gif-animotes.css discord/addon/core/
 	
 	cd discord/addon && npm install
-	cd discord/addon && webpack bpm.js ../../build/discord/bpm.js
+	cd discord/addon && npm run build
+	cp discord/addon/dist/bpm.js build/discord/bpm.js
 	
 	sed -i.bak "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/bpm.js
 	sed -i.bak "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/bpm.js
@@ -305,6 +307,7 @@ discord/installer: FORCE $(DISCORD_INSTALLER) $(DISCORD_INSTALLER_LIB)
 
 discord/integration.asar: $(DISCORD_INTEGRATION)
 	mkdir -p build/discord
+	cp build/export.json discord/integration/emote_data.json
 	asar pack discord/integration/ build/discord/integration.asar
 
 discord/betterDiscord-bpm.plugin.js: discord/bpm.js
@@ -316,6 +319,8 @@ discord/betterDiscord-bpm.plugin.js: discord/bpm.js
 	sed -i.bak 's/IS_BETTER_DISCORD = false/IS_BETTER_DISCORD = true/g' build/better-discord/betterDiscord-bpm.plugin.js
 
 discord: discord/bpm.js discord/betterDiscord-bpm.plugin.js discord/integration.asar discord/installer
+	cd build/discord && zip -r ../discord.zip *
+
 
 clean/discord:
 	rm -rf build/discord
