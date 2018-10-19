@@ -12,6 +12,7 @@
     margin: 20px 0;
     text-align: center;
 }
+
 /* Important stuff link flair*/
 div.linkflair-btimportant div.entry {
 background-color: rgb(252, 225, 243) !important;
@@ -210,12 +211,12 @@ color: #FFF !important
      height: 16px;
 }
 
-.flair-wine { background-position: 0px -16px }
-.flair-cocktail { background-position: 0px -32px }
-.flair-beer1 { background-position: 0px -48px }
-.flair-liquor1 { background-position: 0px -64px }
-.flair-liquor2 { background-position: 0px -80px }
-.flair-beer2 { background-position: 0px -96px }
+.flair-wine { background-position: 0px -16px; color: transparent }
+.flair-cocktail { background-position: 0px -32px; color: transparent }
+.flair-beer1 { background-position: 0px -48px; color: transparent }
+.flair-liquor1 { background-position: 0px -64px; color: transparent }
+.flair-liquor2 { background-position: 0px -80px; color: transparent }
+.flair-beer2 { background-position: 0px -96px; color: transparent }
 
 
 /***************************/
@@ -692,6 +693,15 @@ height: 140px;
 background-image: url(%%abdonotwant%%)
 }
 
+a[href|="/q0salute"]{
+display:block;
+clear: none;
+float: left;
+width: 198px;
+height: 151px;
+background-image: url(%%Q0Salute%%)
+}
+
 a[href|="/spikesad"]{
 display:block;
 clear: none;
@@ -778,14 +788,6 @@ width: 150px;
 height: 132px;
 background-image: url(%%cadessheet%%)
 }
-a[href|="/ponykoreaisbestkorea"]{
-display:block;
-clear: none;
-float: left;
-width: 300px;
-height: 221px;
-background-image: url(%%ponykoreaisbestkorea%%)
-}
 a[href|="/pfudon"], a[href|="/pfudor"], a[href|="/pinkfluffyunicornsdancingonrainbows"], a[href|="/pinkfluffyunicorndancingonrainbows"]{
 display:block;
 clear: none;
@@ -842,6 +844,7 @@ height: 165px;
 background-position: 180px 165px;
 background-image: url(%%bioinabowl%%)
 }
+
 
 /* Sheet offsets */
 

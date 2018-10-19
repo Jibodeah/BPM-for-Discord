@@ -2,6 +2,7 @@
  * A fairly reliable indicator as to whether or not BPM is currently
  * running in a frame.
  */
+
 // Firefox is funny about window/.self/.parent/.top, such that comparing
 // references is unreliable. frameElement is the only test I've found so
 // far that works consistently.
@@ -16,6 +17,39 @@ var emote_regexp = /\[\]\((\/[\w:!#\/\-]+)\s*(?:["']([^"]*)["'])?\)/g;
 
 // this!==window on Opera, and doesn't have this object for some reason
 var Node = find_global("Node");
+
+// We can't remove a listener or listen once on a channel due to how Discord has set
+// up its ipc.  So, we have to retain a map of pending image elements.
+const pendingEmoteElements = {};
+
+function loadEmoteFromMainProcess(emoteName, element) {
+    const pendingArray = pendingEmoteElements[emoteName] || [];
+    pendingEmoteElements[emoteName] = pendingArray.concat([element]);
+    
+    window.DiscordNative.ipc.send('load-bpm-emote-request', { emoteName: emoteName });
+}
+
+function applyEmoteResponseToElements(event, data) {
+    const logEvent = Object.assign({}, data);
+    logEvent.data = 'REDACTED';
+    console.log(logEvent);
+
+    if (data.error) {
+        console.log(`Error for emote ${data.emoteName}`);
+        throw data.error;
+    }
+
+    const extname = data.extname;
+    const imageData = data.data;
+    const emoteElements = pendingEmoteElements[data.emoteName]
+    
+    while(emoteElements.length > 0) {
+        const element = emoteElements.pop();
+        element.style.backgroundImage = `url(data:image/${extname};base64,${imageData})`;
+    }
+}
+
+window.DiscordNative.ipc.on('load-bpm-emote-response', applyEmoteResponseToElements);
 
 function preserve_scroll(node, callback) {
     // Move up through the DOM and see if there's a container element that
@@ -67,6 +101,8 @@ function make_emote(match, parts, name, info) {
 
     element.classList.add(info.css_class);
     add_flags(element, parts);
+
+    loadEmoteFromMainProcess(name, element);
 
     return element;
 }

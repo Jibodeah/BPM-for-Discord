@@ -31,7 +31,7 @@
 # - Test
 # - Make thread
 
-VERSION = 66.263
+VERSION = 66.266
 
 # Discord release process:
 # - Bump DISCORD_VERSION (format = discord-v[semantic version]-[alpha/beta/release])
@@ -42,7 +42,7 @@ VERSION = 66.263
 # - Flag pre-release as ready, edited and good to go 
 # - Notify interested parties
 
-DISCORD_VERSION = discord-v0.11.0-beta
+DISCORD_VERSION = discord-v0.11.7-beta
 DISCORD_RELEASE_BASE_BRANCH = discord
 GITHUB_API_HOST = https://api.github.com
 GITHUB_USER = ByzantineFailure
@@ -86,6 +86,7 @@ www: web/* build/betterponymotes-$(VERSION).xpi build/betterponymotes.update.rdf
 sync:
 	chmod 644 www/*
 	chmod 755 www/we www/xul
+	chmod 644 www/we/* www/xul/*
 	chmod 644 animotes/*
 	rsync -e "ssh -p 40719" -zvLr --delete www/ lyra@ponymotes.net:/var/www/ponymotes.net/bpm
 	rsync -e "ssh -p 40719" -zvLr --delete animotes/ lyra@ponymotes.net:/var/www/ponymotes.net/animotes
@@ -217,7 +218,8 @@ build/BPM.safariextension: $(ADDON_DATA) addon/sf-Settings.plist addon/sf-backgr
 #DC_BPM_ARCHIVE_PASSWORD= 
 
 DISCORD_INTEGRATION := \
-	discord/integration/package.json discord/integration/bpm.js discord/integration/README.md
+ 	discord/integration/package.json discord/integration/bpm.js discord/integration/README.md \
+    build/export.json
 
 DISCORD_SETTINGS_SCRIPT := \
 	discord/addon/settings/options.js discord/addon/settings/options.css \
@@ -260,7 +262,8 @@ discord/bpm.js: $(DISCORD_ADDON_SCRIPT)
 	cp build/gif-animotes.css discord/addon/core/
 	
 	cd discord/addon && npm install
-	cd discord/addon && webpack bpm.js ../../build/discord/bpm.js
+	cd discord/addon && npm run build
+	cp discord/addon/dist/bpm.js build/discord/bpm.js
 	
 	sed -i.bak "s/<\!-- REPLACE-WITH-DC-VERSION -->/$(DISCORD_VERSION)/g" build/discord/bpm.js
 	sed -i.bak "s/<\!-- REPLACE-WITH-BPM-VERSION -->/$(VERSION)/g" build/discord/bpm.js
@@ -280,7 +283,7 @@ DISCORD_INSTALLER_LIB := discord/installer/lib/addon.js discord/installer/lib/in
 DISCORD_INSTALLER := discord/installer/index.js discord/installer/package.json \
     discord/installer/install_mac.command discord/installer/install_linux.sh discord/installer/install_windows.bat discord/installer/win_ps.ps1 \
     discord/installer/install_windows_PTB.bat discord/installer/README.md discord/installer/install_mac_PTB.command \
-	discord/installer/install_windows_canary.bat discord/installer/install_mac_canary.command
+	discord/installer/install_windows_canary.bat discord/installer/install_mac_canary.command discord/installer/install_linux_ptb.sh discord/installer/install_linux_canary.sh
 
 #Phony target we can use to force things to build every run
 FORCE: 
@@ -304,6 +307,7 @@ discord/installer: FORCE $(DISCORD_INSTALLER) $(DISCORD_INSTALLER_LIB)
 
 discord/integration.asar: $(DISCORD_INTEGRATION)
 	mkdir -p build/discord
+	cp build/export.json discord/integration/emote_data.json
 	asar pack discord/integration/ build/discord/integration.asar
 
 discord/betterDiscord-bpm.plugin.js: discord/bpm.js
@@ -315,6 +319,8 @@ discord/betterDiscord-bpm.plugin.js: discord/bpm.js
 	sed -i.bak 's/IS_BETTER_DISCORD = false/IS_BETTER_DISCORD = true/g' build/better-discord/betterDiscord-bpm.plugin.js
 
 discord: discord/bpm.js discord/betterDiscord-bpm.plugin.js discord/integration.asar discord/installer
+	cd build/discord && zip -r ../discord.zip *
+
 
 clean/discord:
 	rm -rf build/discord

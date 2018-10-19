@@ -59,6 +59,15 @@ if(window.process) {
     default_prefs.searchButtonTopRight = false;
 }
 
+//We are always global in discord, so these prefs actually
+//function as enable/disable functionality.
+default_prefs.enableGlobalEmotes = true;
+default_prefs.enableGlobalSearch = true;
+//Discord-specific preferences    
+default_prefs.disableDisruptiveEmotes = true;
+default_prefs.disableEmotesInCodeBlocks = false;
+default_prefs.searchButtonTopRight = false;
+
 function initialize_prefs(prefs, sr_name2id) {
     for(var key in default_prefs) {
         if(prefs[key] === undefined) {

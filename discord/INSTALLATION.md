@@ -30,4 +30,39 @@ If you get it working let me know.
 
 ## Uninstall
 
-Reinstall Discord.
+There are three basic steps:
+
+1.  Find the `discord_desktop_core` folder
+2.  Delete `core.asar`
+3.  Rename `core.asar.clean` to `core.asar`
+
+If Discord breaks at any of these steps, you should be able to re-install it and be fine.
+
+## Finding the discord\_desktop\_core folder
+
+### Windows
+
+The folder should be at:
+
+`%APPDATA%/discord/LATEST_VERSION_NUMBER/modules/discord_desktop_core`
+
+`LATEST_VERSION_NUMBER` should be (as of the time of writing this), `0.0.301`, but if there are more folders that are just numbers like that, pick the largest one.
+
+### Mac
+
+The folder should be at:
+
+`~/Library/Application Support/Discord/modules/discord_desktop_core`
+
+### Linux
+
+The folder should be at:
+
+`~/.config/discord/modules/discord_desktop_core`
+
+OR
+
+`$XDG_CONFIG_HOME/discord/modules/discord_desktop_core`
+
+If you pointed the installer somewhere else, you will have to find where it is.
+
